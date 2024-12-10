@@ -62,6 +62,9 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
         subjectCategoryService.insert(subjectCategory);
     }
 
+    /**
+     * 根据传递参数查询种类
+     */
     @Override
     public List<SubjectCategoryBO> queryCategory(SubjectCategoryBO subjectCategoryBO) {
         SubjectCategory subjectCategory = SubjectCategoryConverter.INSTANCE
@@ -98,26 +101,37 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
         return count > 0;
     }
 
+    /**
+     * 从缓存中获取数据，缓存中没有数据则通过传递的函数进行查询并将查询结果放入缓存
+     */
     @SneakyThrows
     @Override
     public List<SubjectCategoryBO> queryCategoryAndLabel(SubjectCategoryBO subjectCategoryBO) {
         Long id = subjectCategoryBO.getId();
-        String cacheKey = "categoryAndLabel." + subjectCategoryBO.getId();
+        String cacheKey = "categoryAndLabel." + id;
+        
         List<SubjectCategoryBO> subjectCategoryBOS = cacheUtil.getResult(cacheKey,
                 SubjectCategoryBO.class, (key) -> getSubjectCategoryBOS(id));
         return subjectCategoryBOS;
     }
-
+    
+    /**
+     * 根据一级id得到所有的二级分类以及对于标签
+     */
     private List<SubjectCategoryBO> getSubjectCategoryBOS(Long categoryId) {
         SubjectCategory subjectCategory = new SubjectCategory();
         subjectCategory.setParentId(categoryId);
         subjectCategory.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
+        //得到对应二级分类
         List<SubjectCategory> subjectCategoryList = subjectCategoryService.queryCategory(subjectCategory);
+        
         if (log.isInfoEnabled()) {
             log.info("SubjectCategoryController.queryCategoryAndLabel.subjectCategoryList:{}",
                     JSON.toJSONString(subjectCategoryList));
         }
         List<SubjectCategoryBO> categoryBOList = SubjectCategoryConverter.INSTANCE.convertBoToCategory(subjectCategoryList);
+        
+        //根据二级分类并发查询所有标签
         Map<Long, List<SubjectLabelBO>> map = new HashMap<>();
         List<CompletableFuture<Map<Long, List<SubjectLabelBO>>>> completableFutureList = categoryBOList.stream().map(category ->
                 CompletableFuture.supplyAsync(() -> getLabelBOList(category), labelThreadPool)
@@ -140,19 +154,17 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
         return categoryBOList;
     }
 
+    /**
+     * 根据二级分类查询对应的标签
+     */
     private Map<Long, List<SubjectLabelBO>> getLabelBOList(SubjectCategoryBO category) {
         if (log.isInfoEnabled()) {
             log.info("getLabelBOList:{}", JSON.toJSONString(category));
         }
         Map<Long, List<SubjectLabelBO>> labelMap = new HashMap<>();
-        SubjectMapping subjectMapping = new SubjectMapping();
-        subjectMapping.setCategoryId(category.getId());
-        List<SubjectMapping> mappingList = subjectMappingService.queryLabelId(subjectMapping);
-        if (CollectionUtils.isEmpty(mappingList)) {
-            return null;
-        }
-        List<Long> labelIdList = mappingList.stream().map(SubjectMapping::getLabelId).collect(Collectors.toList());
-        List<SubjectLabel> labelList = subjectLabelService.batchQueryById(labelIdList);
+        SubjectLabel subjectLabel = new SubjectLabel();
+        subjectLabel.setCategoryId(category.getId());
+        List<SubjectLabel> labelList = subjectLabelService.queryByCondition(subjectLabel);
         List<SubjectLabelBO> labelBOList = new LinkedList<>();
         labelList.forEach(label -> {
             SubjectLabelBO subjectLabelBO = new SubjectLabelBO();

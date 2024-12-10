@@ -17,9 +17,6 @@ import java.util.function.Function;
 
 /**
  * 缓存工具类
- *
- * @author: ChickenWing
- * @date: 2023/12/3
  */
 @Component
 public class CacheUtil<K, V> {
