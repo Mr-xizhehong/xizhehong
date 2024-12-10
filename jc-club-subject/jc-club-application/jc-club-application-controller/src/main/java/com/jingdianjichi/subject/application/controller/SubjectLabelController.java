@@ -19,9 +19,6 @@ import java.util.List;
 
 /**
  * 标签controller
- *
- * @author: ChickenWing
- * @date: 2023/10/3
  */
 @RestController
 @RequestMapping("/subject/label")
