@@ -21,9 +21,6 @@ import reactor.core.publisher.Mono;
 
 /**
  * 登录拦截器
- *
- * @author: ChickenWing
- * @date: 2023/11/26
  */
 @Component
 @Slf4j

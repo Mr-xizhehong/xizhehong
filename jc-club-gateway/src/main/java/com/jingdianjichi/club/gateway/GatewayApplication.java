@@ -6,9 +6,6 @@ import org.springframework.context.annotation.ComponentScan;
 
 /**
  * 网关启动器
- * 
- * @author: ChickenWing
- * @date: 2023/10/11
  */
 @SpringBootApplication
 @ComponentScan("com.jingdianjichi")

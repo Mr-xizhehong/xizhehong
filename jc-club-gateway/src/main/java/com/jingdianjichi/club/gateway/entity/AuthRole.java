@@ -5,9 +5,6 @@ import java.util.Date;
 
 /**
  * (AuthRole)实体类
- *
- * @author makejava
- * @since 2023-11-02 23:55:19
  */
 public class AuthRole implements Serializable {
     private static final long serialVersionUID = 422256240999600735L;

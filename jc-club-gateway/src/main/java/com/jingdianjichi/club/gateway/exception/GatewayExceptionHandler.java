@@ -15,9 +15,6 @@ import reactor.core.publisher.Mono;
 
 /**
  * 网关全局异常处理
- *
- * @author: ChickenWing
- * @date: 2023/10/28
  */
 @Component
 public class GatewayExceptionHandler implements ErrorWebExceptionHandler {

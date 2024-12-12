@@ -27,9 +27,6 @@ import java.util.List;
 
 /**
  * 刷题controller
- *
- * @author: ChickenWing
- * @date: 2023/10/1
  */
 @RestController
 @Slf4j

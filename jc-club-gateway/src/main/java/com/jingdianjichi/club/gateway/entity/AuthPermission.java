@@ -5,9 +5,6 @@ import java.util.Date;
 
 /**
  * (AuthPermission)实体类
- *
- * @author makejava
- * @since 2023-11-03 00:45:50
  */
 public class AuthPermission implements Serializable {
     private static final long serialVersionUID = -56518358607843924L;
