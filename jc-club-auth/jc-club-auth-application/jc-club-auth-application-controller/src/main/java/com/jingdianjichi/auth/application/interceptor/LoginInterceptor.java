@@ -1,6 +1,6 @@
 package com.jingdianjichi.auth.application.interceptor;
 
-import com.jingdianjichi.auth.context.LoginContextHolder;
+import com.jingdianjichi.auth.application.context.LoginContextHolder;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.lang.Nullable;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -11,8 +11,6 @@ import javax.servlet.http.HttpServletResponse;
 /**
  * 登录拦截器
  *
- * @author: ChickenWing
- * @date: 2023/11/26
  */
 public class LoginInterceptor implements HandlerInterceptor {
 
