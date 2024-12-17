@@ -9,9 +9,6 @@ import java.util.List;
 
 /**
  * (AuthRolePermission)表服务接口
- *
- * @author makejava
- * @since 2023-11-04 22:16:00
  */
 public interface AuthRolePermissionService {
 

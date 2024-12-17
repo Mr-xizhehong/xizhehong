@@ -6,10 +6,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * (AuthRolePermission)实体类
- *
- * @author makejava
- * @since 2023-11-04 22:16:00
+ * 用户角色权限关联表BO
  */
 @Data
 public class AuthRolePermissionBO implements Serializable {

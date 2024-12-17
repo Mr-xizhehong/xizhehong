@@ -1,12 +1,11 @@
 package com.jingdianjichi.auth.domain.service.impl;
 
-import cn.dev33.satoken.secure.SaSecureUtil;
 import cn.dev33.satoken.stp.SaTokenInfo;
 import cn.dev33.satoken.stp.StpUtil;
 import com.google.gson.Gson;
 import com.jingdianjichi.auth.common.enums.AuthUserStatusEnum;
 import com.jingdianjichi.auth.common.enums.IsDeletedFlagEnum;
-import com.jingdianjichi.auth.domain.constants.AuthConstant;
+import com.jingdianjichi.auth.domain.constant.AuthRoleConstant;
 import com.jingdianjichi.auth.domain.convert.AuthUserBOConverter;
 import com.jingdianjichi.auth.domain.entity.AuthUserBO;
 import com.jingdianjichi.auth.domain.redis.RedisUtil;
@@ -53,7 +52,7 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
     @Resource
     private AuthRoleService authRoleService;
 
-    private String salt = "chicken";
+    private String salt = "xizhehong";
 
     @Resource
     private RedisUtil redisUtil;
@@ -76,14 +75,8 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
             return true;
         }
         AuthUser authUser = AuthUserBOConverter.INSTANCE.convertBOToEntity(authUserBO);
-        if (StringUtils.isNotBlank(authUser.getPassword())) {
-            authUser.setPassword(SaSecureUtil.md5BySalt(authUser.getPassword(), salt));
-        }
-        if (StringUtils.isBlank(authUser.getAvatar())) {
-            authUser.setAvatar("http://117.72.10.84:9000/user/icon/微信图片_20231203153718(1).png");
-        }
         if (StringUtils.isBlank(authUser.getNickName())) {
-            authUser.setNickName("鸡翅粉丝");
+            authUser.setNickName("奥特曼");
         }
         authUser.setStatus(AuthUserStatusEnum.OPEN.getCode());
         authUser.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
@@ -91,7 +84,7 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
 
         //建立一个初步的角色的关联
         AuthRole authRole = new AuthRole();
-        authRole.setRoleKey(AuthConstant.NORMAL_USER);
+        authRole.setRoleKey(AuthRoleConstant.NORMAL_USER);
         AuthRole roleResult = authRoleService.queryByCondition(authRole);
         Long roleId = roleResult.getId();
         Long userId = authUser.getId();

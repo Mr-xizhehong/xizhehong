@@ -17,9 +17,6 @@ import javax.annotation.Resource;
 
 /**
  * 权限controller
- *
- * @author: ChickenWing
- * @date: 2023/11/2
  */
 @RestController
 @RequestMapping("/permission/")

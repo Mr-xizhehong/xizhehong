@@ -6,9 +6,6 @@ import org.springframework.data.domain.PageRequest;
 
 /**
  * (AuthUserRole)表服务接口
- *
- * @author makejava
- * @since 2023-11-03 00:18:09
  */
 public interface AuthUserRoleService {
 

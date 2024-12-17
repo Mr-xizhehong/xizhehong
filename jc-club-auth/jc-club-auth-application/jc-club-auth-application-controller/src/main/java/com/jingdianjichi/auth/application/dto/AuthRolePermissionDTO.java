@@ -8,9 +8,6 @@ import java.util.List;
 
 /**
  * (AuthRolePermission)实体类
- *
- * @author makejava
- * @since 2023-11-04 22:16:00
  */
 @Data
 public class AuthRolePermissionDTO implements Serializable {

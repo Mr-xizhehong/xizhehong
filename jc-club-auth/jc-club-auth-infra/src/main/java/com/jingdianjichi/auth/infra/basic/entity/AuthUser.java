@@ -5,9 +5,6 @@ import java.io.Serializable;
 
 /**
  * (AuthUser)实体类
- *
- * @author makejava
- * @since 2023-11-01 01:25:22
  */
 public class AuthUser implements Serializable {
     private static final long serialVersionUID = -50435275569670090L;

@@ -5,9 +5,6 @@ import java.io.Serializable;
 
 /**
  * (AuthRolePermission)实体类
- *
- * @author makejava
- * @since 2023-11-04 22:16:00
  */
 public class AuthRolePermission implements Serializable {
     private static final long serialVersionUID = 459343371709166261L;

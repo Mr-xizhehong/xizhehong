@@ -8,9 +8,6 @@ import java.util.List;
 
 /**
  * (AuthPermission)表服务接口
- *
- * @author makejava
- * @since 2023-11-03 00:45:50
  */
 public interface AuthPermissionService {
 

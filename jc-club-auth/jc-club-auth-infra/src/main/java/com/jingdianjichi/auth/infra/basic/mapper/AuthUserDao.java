@@ -7,9 +7,6 @@ import java.util.List;
 
 /**
  * (AuthUser)表数据库访问层
- *
- * @author makejava
- * @since 2023-11-01 01:25:22
  */
 public interface AuthUserDao {
 

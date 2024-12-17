@@ -6,9 +6,6 @@ import java.io.Serializable;
 
 /**
  * 权限dto
- * 
- * @author: ChickenWing
- * @date: 2023/11/3
  */
 @Data
 public class AuthPermissionBO implements Serializable {

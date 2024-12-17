@@ -14,9 +14,6 @@ import java.util.List;
 
 /**
  * (AuthRolePermission)表服务实现类
- *
- * @author makejava
- * @since 2023-11-04 22:16:00
  */
 @Service("authRolePermissionService")
 public class AuthRolePermissionServiceImpl implements AuthRolePermissionService {

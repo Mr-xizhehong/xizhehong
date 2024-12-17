@@ -7,9 +7,6 @@ import java.util.Date;
 
 /**
  * 权限dto
- * 
- * @author: ChickenWing
- * @date: 2023/11/3
  */
 @Data
 public class AuthPermissionDTO implements Serializable {

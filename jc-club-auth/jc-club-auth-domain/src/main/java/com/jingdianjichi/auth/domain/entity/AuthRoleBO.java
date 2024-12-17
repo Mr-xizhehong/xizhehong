@@ -6,9 +6,6 @@ import java.io.Serializable;
 
 /**
  * 角色bo
- *
- * @author: ChickenWing
- * @date: 2023/11/2
  */
 @Data
 public class AuthRoleBO implements Serializable {
