@@ -17,6 +17,7 @@ import org.springframework.stereotype.Component;
 import javax.annotation.Resource;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 多选题目的策略类
@@ -35,14 +36,16 @@ public class MultipleTypeHandler implements SubjectTypeHandler{
     @Override
     public void add(SubjectInfoBO subjectInfoBO) {
         //多选题目的插入
-        List<SubjectMultiple> subjectMultipleList = new LinkedList<>();
-        subjectInfoBO.getOptionList().forEach(option -> {
-            SubjectMultiple subjectMultiple = MultipleSubjectConverter.INSTANCE.convertBoToEntity(option);
-            subjectMultiple.setSubjectId(subjectInfoBO.getId());
-            subjectMultiple.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
-            subjectMultipleList.add(subjectMultiple);
-        });
+        List<SubjectMultiple> subjectMultipleList = subjectInfoBO.getOptionList().stream()
+                .map(option -> {
+                    SubjectMultiple subjectMultiple = MultipleSubjectConverter.INSTANCE.convertBoToEntity(option);
+                    subjectMultiple.setSubjectId(subjectInfoBO.getId());
+                    subjectMultiple.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
+                    return subjectMultiple;
+                })
+                .collect(Collectors.toList());
         subjectMultipleService.batchInsert(subjectMultipleList);
+        
     }
 
     @Override

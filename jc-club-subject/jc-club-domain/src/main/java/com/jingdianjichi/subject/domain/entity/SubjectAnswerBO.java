@@ -5,10 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 /**
- * 题目答案dto
- *
- * @author: ChickenWing
- * @date: 2023/10/5
+ * 题目答案BO
  */
 @Data
 public class SubjectAnswerBO implements Serializable {
@@ -19,7 +16,7 @@ public class SubjectAnswerBO implements Serializable {
     private Integer optionType;
 
     /**
-     * 答案
+     * 答案内容
      */
     private String optionContent;
 

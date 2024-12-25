@@ -59,7 +59,16 @@ public class MybatisInterceptor implements Interceptor {
     //当一次性进行多个更改时，比如批量插入时，需要遍历map分别进行更新
     private void replaceMap(Map parameter, String loginId, SqlCommandType sqlCommandType) {
         for (Object val : parameter.values()) {
-            replace(val, loginId, sqlCommandType);
+            if (val instanceof Collection) {
+                // 如果是集合，则遍历集合内的元素
+                Collection<?> collection = (Collection<?>) val;
+                for (Object element : collection) {
+                    replace(element, loginId, sqlCommandType);
+                }
+            }
+            else {
+                replace(val, loginId, sqlCommandType);
+            }
         }
     }
 

@@ -7,9 +7,6 @@ import java.io.Serializable;
 
 /**
  * 题目信息表(SubjectInfo)实体类
- *
- * @author makejava
- * @since 2023-10-05 21:28:57
  */
 @Data
 public class SubjectInfo implements Serializable {

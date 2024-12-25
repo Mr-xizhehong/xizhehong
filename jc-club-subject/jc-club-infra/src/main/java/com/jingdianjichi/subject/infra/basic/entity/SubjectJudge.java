@@ -7,9 +7,6 @@ import java.io.Serializable;
 
 /**
  * 判断题(SubjectJudge)实体类
- *
- * @author makejava
- * @since 2023-10-05 21:29:47
  */
 @Data
 public class SubjectJudge implements Serializable {
