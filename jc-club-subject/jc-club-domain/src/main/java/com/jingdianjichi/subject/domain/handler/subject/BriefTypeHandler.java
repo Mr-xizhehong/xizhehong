@@ -13,9 +13,6 @@ import javax.annotation.Resource;
 
 /**
  * 简答题目的策略类
- * 
- * @author: ChickenWing
- * @date: 2023/10/5
  */
 @Component
 public class BriefTypeHandler implements SubjectTypeHandler{

@@ -21,9 +21,6 @@ import java.util.concurrent.TimeUnit;
 
 /**
  * 同步点赞数据
- *
- * @author: ChickenWing
- * @date: 2024/1/8
  */
 @Component
 @Slf4j

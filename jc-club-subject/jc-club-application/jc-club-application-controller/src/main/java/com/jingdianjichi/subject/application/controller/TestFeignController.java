@@ -15,9 +15,6 @@ import java.util.List;
 
 /**
  * 刷题分类controller
- *
- * @author: ChickenWing
- * @date: 2023/10/1
  */
 @RestController
 @RequestMapping("/subject/category")

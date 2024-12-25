@@ -8,10 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 题目dto
- *
- * @author: ChickenWing
- * @date: 2023/10/5
+ * 题目BO
  */
 @Data
 public class SubjectInfoBO extends PageInfo implements Serializable {
@@ -75,7 +72,6 @@ public class SubjectInfoBO extends PageInfo implements Serializable {
     private Long labelId;
 
     private String keyWord;
-
 
     /**
      * 创建人昵称

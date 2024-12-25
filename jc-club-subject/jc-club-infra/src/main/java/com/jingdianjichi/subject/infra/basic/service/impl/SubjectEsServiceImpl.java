@@ -37,6 +37,7 @@ public class SubjectEsServiceImpl implements SubjectEsService {
         Map<String, Object> data = convert2EsSourceData(subjectInfoEs);
         esSourceData.setDocId(subjectInfoEs.getDocId().toString());
         esSourceData.setData(data);
+        //将集群名和index名存入indexInfo中，并传参
         return EsRestClient.insertDoc(getEsIndexInfo(), esSourceData);
     }
 

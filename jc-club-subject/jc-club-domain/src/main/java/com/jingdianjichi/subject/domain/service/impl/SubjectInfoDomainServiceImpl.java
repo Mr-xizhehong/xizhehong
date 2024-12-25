@@ -61,6 +61,9 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
 
     private static final String RANK_KEY = "subject_rank";
 
+    /**
+     * 工厂加策略模式新增题目
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
     public void add(SubjectInfoBO subjectInfoBO) {
@@ -70,9 +73,12 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
         SubjectInfo subjectInfo = SubjectInfoConverter.INSTANCE.convertBoToInfo(subjectInfoBO);
         subjectInfo.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         subjectInfoService.insert(subjectInfo);
+        //获取对应题型的策略
         SubjectTypeHandler handler = subjectTypeHandlerFactory.getHandler(subjectInfo.getSubjectType());
+        //将插入题目操作自动生成的题目id放入bo
         subjectInfoBO.setId(subjectInfo.getId());
         handler.add(subjectInfoBO);
+        //插入subjectmapping
         List<Integer> categoryIds = subjectInfoBO.getCategoryIds();
         List<Integer> labelIds = subjectInfoBO.getLabelIds();
         List<SubjectMapping> mappingList = new LinkedList<>();
@@ -88,17 +94,19 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
         });
         subjectMappingService.batchInsert(mappingList);
         //同步到es
+        String loginId = LoginUtil.getLoginId();
+        UserInfo userInfo = userRpc.getUserInfo(loginId);
         SubjectInfoEs subjectInfoEs = new SubjectInfoEs();
         subjectInfoEs.setDocId(new IdWorkerUtil(1, 1, 1).nextId());
         subjectInfoEs.setSubjectId(subjectInfo.getId());
         subjectInfoEs.setSubjectAnswer(subjectInfoBO.getSubjectAnswer());
         subjectInfoEs.setCreateTime(new Date().getTime());
-        subjectInfoEs.setCreateUser("鸡翅");
+        subjectInfoEs.setCreateUser(userInfo.getNickName());
         subjectInfoEs.setSubjectName(subjectInfo.getSubjectName());
         subjectInfoEs.setSubjectType(subjectInfo.getSubjectType());
         subjectEsService.insert(subjectInfoEs);
         //redis放入zadd计入排行榜
-        redisUtil.addScore(RANK_KEY, LoginUtil.getLoginId(), 1);
+        redisUtil.addScore(RANK_KEY, loginId, 1);
     }
 
     @Override

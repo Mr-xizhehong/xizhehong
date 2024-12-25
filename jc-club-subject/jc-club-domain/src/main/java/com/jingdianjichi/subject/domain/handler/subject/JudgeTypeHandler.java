@@ -18,9 +18,6 @@ import java.util.List;
 
 /**
  * 判断题目的策略类
- * 
- * @author: ChickenWing
- * @date: 2023/10/5
  */
 @Component
 public class JudgeTypeHandler implements SubjectTypeHandler{

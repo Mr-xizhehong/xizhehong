@@ -1,6 +1,8 @@
 package com.jingdianjichi.subject.infra.config;
 
 import com.jingdianjichi.subject.common.util.LoginUtil;
+import com.jingdianjichi.subject.infra.entity.UserInfo;
+import com.jingdianjichi.subject.infra.rpc.UserRpc;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.ibatis.executor.Executor;
@@ -9,14 +11,12 @@ import org.apache.ibatis.mapping.SqlCommandType;
 import org.apache.ibatis.plugin.*;
 import org.springframework.stereotype.Component;
 
+import javax.annotation.Resource;
 import java.lang.reflect.Field;
 import java.util.*;
 
 /**
  * 填充createBy,createTime等公共字段的拦截器
- *
- * @author: ChickenWing
- * @date: 2024/1/5
  */
 @Component
 @Slf4j
@@ -24,6 +24,9 @@ import java.util.*;
         MappedStatement.class, Object.class
 })})
 public class MybatisInterceptor implements Interceptor {
+    
+    @Resource
+    private UserRpc userRpc;
 
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
@@ -38,8 +41,9 @@ public class MybatisInterceptor implements Interceptor {
         if (StringUtils.isBlank(loginId)) {
             return invocation.proceed();
         }
+        UserInfo userInfo = userRpc.getUserInfo(loginId);
         if (SqlCommandType.INSERT == sqlCommandType || SqlCommandType.UPDATE == sqlCommandType) {
-            replaceEntityProperty(parameter, loginId, sqlCommandType);
+            replaceEntityProperty(parameter, userInfo.getNickName(), sqlCommandType);
         }
         return invocation.proceed();
     }
@@ -52,6 +56,7 @@ public class MybatisInterceptor implements Interceptor {
         }
     }
 
+    //当一次性进行多个更改时，比如批量插入时，需要遍历map分别进行更新
     private void replaceMap(Map parameter, String loginId, SqlCommandType sqlCommandType) {
         for (Object val : parameter.values()) {
             replace(val, loginId, sqlCommandType);

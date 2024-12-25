@@ -38,9 +38,7 @@ public class SubjectCategoryDomainServiceImpl implements SubjectCategoryDomainSe
 
     @Resource
     private SubjectCategoryService subjectCategoryService;
-
-    @Resource
-    private SubjectMappingService subjectMappingService;
+    
 
     @Resource
     private SubjectLabelService subjectLabelService;

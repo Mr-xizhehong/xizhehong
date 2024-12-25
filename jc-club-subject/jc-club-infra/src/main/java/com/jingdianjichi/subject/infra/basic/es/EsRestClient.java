@@ -58,6 +58,7 @@ public class EsRestClient {
 
     @PostConstruct
     public void initialize() {
+        // 初始化集群，遍历所有集群节点并获得对应服务器
         List<EsClusterConfig> esConfigs = esConfigProperties.getEsConfigs();
         for (EsClusterConfig esConfig : esConfigs) {
             log.info("initialize.config.name:{},node:{}", esConfig.getName(), esConfig.getNodes());
