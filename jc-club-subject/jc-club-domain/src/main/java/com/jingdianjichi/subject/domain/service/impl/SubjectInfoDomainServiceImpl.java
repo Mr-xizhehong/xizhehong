@@ -108,22 +108,27 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
         //redis放入zadd计入排行榜
         redisUtil.addScore(RANK_KEY, loginId, 1);
     }
-
+    
+    /**
+     * 根据所选题目种类和标签分页查询题目
+     */
     @Override
     public PageResult<SubjectInfoBO> getSubjectPage(SubjectInfoBO subjectInfoBO) {
         PageResult<SubjectInfoBO> pageResult = new PageResult<>();
         pageResult.setPageNo(subjectInfoBO.getPageNo());
         pageResult.setPageSize(subjectInfoBO.getPageSize());
         int start = (subjectInfoBO.getPageNo() - 1) * subjectInfoBO.getPageSize();
+        Long categoryId = subjectInfoBO.getCategoryId();
+        Long labelId = subjectInfoBO.getLabelId();
         SubjectInfo subjectInfo = SubjectInfoConverter.INSTANCE.convertBoToInfo(subjectInfoBO);
-        int count = subjectInfoService.countByCondition(subjectInfo, subjectInfoBO.getCategoryId()
-                , subjectInfoBO.getLabelId());
+        //如果没有对应题目，及时进行返回增加效率
+        int count = subjectInfoService.countByCondition(subjectInfo, categoryId, labelId);
         if (count == 0) {
             return pageResult;
         }
-        List<SubjectInfo> subjectInfoList = subjectInfoService.queryPage(subjectInfo, subjectInfoBO.getCategoryId()
-                , subjectInfoBO.getLabelId(), start, subjectInfoBO.getPageSize());
+        List<SubjectInfo> subjectInfoList = subjectInfoService.queryPage(subjectInfo, categoryId, labelId, start, subjectInfoBO.getPageSize());
         List<SubjectInfoBO> subjectInfoBOS = SubjectInfoConverter.INSTANCE.convertListInfoToBO(subjectInfoList);
+        //获取对应题目的标签名字
         subjectInfoBOS.forEach(info -> {
             SubjectMapping subjectMapping = new SubjectMapping();
             subjectMapping.setSubjectId(info.getId());
@@ -137,7 +142,8 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
         pageResult.setTotal(count);
         return pageResult;
     }
-
+    
+    
     @Override
     public SubjectInfoBO querySubjectInfo(SubjectInfoBO subjectInfoBO) {
         SubjectInfo subjectInfo = subjectInfoService.queryById(subjectInfoBO.getId());
