@@ -8,8 +8,8 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-12-07T18:00:31+0800",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 1.8.0_421 (Oracle Corporation)"
+    date = "2024-12-26T15:57:02+0800",
+    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 3.40.0.z20241112-1021, environment: Java 17.0.13 (Eclipse Adoptium)"
 )
 public class SubjectLabelDTOConverterImpl implements SubjectLabelDTOConverter {
 
@@ -21,10 +21,10 @@ public class SubjectLabelDTOConverterImpl implements SubjectLabelDTOConverter {
 
         SubjectLabelBO subjectLabelBO = new SubjectLabelBO();
 
+        subjectLabelBO.setCategoryId( subjectLabelDTO.getCategoryId() );
         subjectLabelBO.setId( subjectLabelDTO.getId() );
         subjectLabelBO.setLabelName( subjectLabelDTO.getLabelName() );
         subjectLabelBO.setSortNum( subjectLabelDTO.getSortNum() );
-        subjectLabelBO.setCategoryId( subjectLabelDTO.getCategoryId() );
 
         return subjectLabelBO;
     }
@@ -50,8 +50,8 @@ public class SubjectLabelDTOConverterImpl implements SubjectLabelDTOConverter {
 
         SubjectLabelDTO subjectLabelDTO = new SubjectLabelDTO();
 
-        subjectLabelDTO.setId( subjectLabelBO.getId() );
         subjectLabelDTO.setCategoryId( subjectLabelBO.getCategoryId() );
+        subjectLabelDTO.setId( subjectLabelBO.getId() );
         subjectLabelDTO.setLabelName( subjectLabelBO.getLabelName() );
         subjectLabelDTO.setSortNum( subjectLabelBO.getSortNum() );
 

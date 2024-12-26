@@ -8,8 +8,8 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-12-07T18:00:29+0800",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 1.8.0_421 (Oracle Corporation)"
+    date = "2024-12-26T15:57:01+0800",
+    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 3.40.0.z20241112-1021, environment: Java 17.0.13 (Eclipse Adoptium)"
 )
 public class MultipleSubjectConverterImpl implements MultipleSubjectConverter {
 
@@ -21,11 +21,11 @@ public class MultipleSubjectConverterImpl implements MultipleSubjectConverter {
 
         SubjectMultiple subjectMultiple = new SubjectMultiple();
 
+        subjectMultiple.setIsCorrect( subjectAnswerBO.getIsCorrect() );
+        subjectMultiple.setOptionContent( subjectAnswerBO.getOptionContent() );
         if ( subjectAnswerBO.getOptionType() != null ) {
             subjectMultiple.setOptionType( subjectAnswerBO.getOptionType().longValue() );
         }
-        subjectMultiple.setOptionContent( subjectAnswerBO.getOptionContent() );
-        subjectMultiple.setIsCorrect( subjectAnswerBO.getIsCorrect() );
 
         return subjectMultiple;
     }
@@ -51,11 +51,11 @@ public class MultipleSubjectConverterImpl implements MultipleSubjectConverter {
 
         SubjectAnswerBO subjectAnswerBO = new SubjectAnswerBO();
 
+        subjectAnswerBO.setIsCorrect( subjectMultiple.getIsCorrect() );
+        subjectAnswerBO.setOptionContent( subjectMultiple.getOptionContent() );
         if ( subjectMultiple.getOptionType() != null ) {
             subjectAnswerBO.setOptionType( subjectMultiple.getOptionType().intValue() );
         }
-        subjectAnswerBO.setOptionContent( subjectMultiple.getOptionContent() );
-        subjectAnswerBO.setIsCorrect( subjectMultiple.getIsCorrect() );
 
         return subjectAnswerBO;
     }

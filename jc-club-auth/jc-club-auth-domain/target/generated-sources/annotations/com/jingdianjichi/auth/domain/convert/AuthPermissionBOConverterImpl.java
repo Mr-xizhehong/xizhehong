@@ -6,8 +6,8 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-12-17T16:25:59+0800",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 1.8.0_421 (Oracle Corporation)"
+    date = "2024-12-26T15:49:28+0800",
+    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 3.40.0.z20241112-1021, environment: Java 17.0.13 (Eclipse Adoptium)"
 )
 public class AuthPermissionBOConverterImpl implements AuthPermissionBOConverter {
 
@@ -19,15 +19,15 @@ public class AuthPermissionBOConverterImpl implements AuthPermissionBOConverter 
 
         AuthPermission authPermission = new AuthPermission();
 
+        authPermission.setIcon( authPermissionBO.getIcon() );
         authPermission.setId( authPermissionBO.getId() );
+        authPermission.setMenuUrl( authPermissionBO.getMenuUrl() );
         authPermission.setName( authPermissionBO.getName() );
         authPermission.setParentId( authPermissionBO.getParentId() );
-        authPermission.setType( authPermissionBO.getType() );
-        authPermission.setMenuUrl( authPermissionBO.getMenuUrl() );
-        authPermission.setStatus( authPermissionBO.getStatus() );
-        authPermission.setShow( authPermissionBO.getShow() );
-        authPermission.setIcon( authPermissionBO.getIcon() );
         authPermission.setPermissionKey( authPermissionBO.getPermissionKey() );
+        authPermission.setShow( authPermissionBO.getShow() );
+        authPermission.setStatus( authPermissionBO.getStatus() );
+        authPermission.setType( authPermissionBO.getType() );
 
         return authPermission;
     }

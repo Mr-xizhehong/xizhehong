@@ -10,8 +10,8 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-12-07T18:00:29+0800",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 1.8.0_421 (Oracle Corporation)"
+    date = "2024-12-26T15:57:01+0800",
+    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 3.40.0.z20241112-1021, environment: Java 17.0.13 (Eclipse Adoptium)"
 )
 public class SubjectInfoConverterImpl implements SubjectInfoConverter {
 
@@ -24,13 +24,13 @@ public class SubjectInfoConverterImpl implements SubjectInfoConverter {
         SubjectInfo subjectInfo = new SubjectInfo();
 
         subjectInfo.setId( subjectInfoBO.getId() );
-        subjectInfo.setSubjectName( subjectInfoBO.getSubjectName() );
-        subjectInfo.setSubjectDifficult( subjectInfoBO.getSubjectDifficult() );
         subjectInfo.setSettleName( subjectInfoBO.getSettleName() );
-        subjectInfo.setSubjectType( subjectInfoBO.getSubjectType() );
-        subjectInfo.setSubjectScore( subjectInfoBO.getSubjectScore() );
-        subjectInfo.setSubjectParse( subjectInfoBO.getSubjectParse() );
         subjectInfo.setSubjectCount( subjectInfoBO.getSubjectCount() );
+        subjectInfo.setSubjectDifficult( subjectInfoBO.getSubjectDifficult() );
+        subjectInfo.setSubjectName( subjectInfoBO.getSubjectName() );
+        subjectInfo.setSubjectParse( subjectInfoBO.getSubjectParse() );
+        subjectInfo.setSubjectScore( subjectInfoBO.getSubjectScore() );
+        subjectInfo.setSubjectType( subjectInfoBO.getSubjectType() );
 
         return subjectInfo;
     }
@@ -43,11 +43,11 @@ public class SubjectInfoConverterImpl implements SubjectInfoConverter {
 
         SubjectInfoBO subjectInfoBO = new SubjectInfoBO();
 
-        subjectInfoBO.setSubjectAnswer( subjectOptionBO.getSubjectAnswer() );
         List<SubjectAnswerBO> list = subjectOptionBO.getOptionList();
         if ( list != null ) {
             subjectInfoBO.setOptionList( new ArrayList<SubjectAnswerBO>( list ) );
         }
+        subjectInfoBO.setSubjectAnswer( subjectOptionBO.getSubjectAnswer() );
 
         return subjectInfoBO;
     }
@@ -61,21 +61,21 @@ public class SubjectInfoConverterImpl implements SubjectInfoConverter {
         SubjectInfoBO subjectInfoBO = new SubjectInfoBO();
 
         if ( subjectOptionBO != null ) {
-            subjectInfoBO.setSubjectAnswer( subjectOptionBO.getSubjectAnswer() );
             List<SubjectAnswerBO> list = subjectOptionBO.getOptionList();
             if ( list != null ) {
                 subjectInfoBO.setOptionList( new ArrayList<SubjectAnswerBO>( list ) );
             }
+            subjectInfoBO.setSubjectAnswer( subjectOptionBO.getSubjectAnswer() );
         }
         if ( subjectInfo != null ) {
             subjectInfoBO.setId( subjectInfo.getId() );
-            subjectInfoBO.setSubjectName( subjectInfo.getSubjectName() );
-            subjectInfoBO.setSubjectDifficult( subjectInfo.getSubjectDifficult() );
             subjectInfoBO.setSettleName( subjectInfo.getSettleName() );
-            subjectInfoBO.setSubjectType( subjectInfo.getSubjectType() );
-            subjectInfoBO.setSubjectScore( subjectInfo.getSubjectScore() );
-            subjectInfoBO.setSubjectParse( subjectInfo.getSubjectParse() );
             subjectInfoBO.setSubjectCount( subjectInfo.getSubjectCount() );
+            subjectInfoBO.setSubjectDifficult( subjectInfo.getSubjectDifficult() );
+            subjectInfoBO.setSubjectName( subjectInfo.getSubjectName() );
+            subjectInfoBO.setSubjectParse( subjectInfo.getSubjectParse() );
+            subjectInfoBO.setSubjectScore( subjectInfo.getSubjectScore() );
+            subjectInfoBO.setSubjectType( subjectInfo.getSubjectType() );
         }
 
         return subjectInfoBO;
@@ -103,13 +103,13 @@ public class SubjectInfoConverterImpl implements SubjectInfoConverter {
         SubjectInfoBO subjectInfoBO = new SubjectInfoBO();
 
         subjectInfoBO.setId( subjectInfo.getId() );
-        subjectInfoBO.setSubjectName( subjectInfo.getSubjectName() );
-        subjectInfoBO.setSubjectDifficult( subjectInfo.getSubjectDifficult() );
         subjectInfoBO.setSettleName( subjectInfo.getSettleName() );
-        subjectInfoBO.setSubjectType( subjectInfo.getSubjectType() );
-        subjectInfoBO.setSubjectScore( subjectInfo.getSubjectScore() );
-        subjectInfoBO.setSubjectParse( subjectInfo.getSubjectParse() );
         subjectInfoBO.setSubjectCount( subjectInfo.getSubjectCount() );
+        subjectInfoBO.setSubjectDifficult( subjectInfo.getSubjectDifficult() );
+        subjectInfoBO.setSubjectName( subjectInfo.getSubjectName() );
+        subjectInfoBO.setSubjectParse( subjectInfo.getSubjectParse() );
+        subjectInfoBO.setSubjectScore( subjectInfo.getSubjectScore() );
+        subjectInfoBO.setSubjectType( subjectInfo.getSubjectType() );
 
         return subjectInfoBO;
     }

@@ -8,8 +8,8 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-12-07T18:00:31+0800",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 1.8.0_421 (Oracle Corporation)"
+    date = "2024-12-26T15:57:02+0800",
+    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 3.40.0.z20241112-1021, environment: Java 17.0.13 (Eclipse Adoptium)"
 )
 public class SubjectCategoryDTOConverterImpl implements SubjectCategoryDTOConverter {
 
@@ -35,12 +35,12 @@ public class SubjectCategoryDTOConverterImpl implements SubjectCategoryDTOConver
 
         SubjectCategoryBO subjectCategoryBO = new SubjectCategoryBO();
 
-        subjectCategoryBO.setId( subjectCategoryDTO.getId() );
         subjectCategoryBO.setCategoryName( subjectCategoryDTO.getCategoryName() );
         subjectCategoryBO.setCategoryType( subjectCategoryDTO.getCategoryType() );
+        subjectCategoryBO.setCount( subjectCategoryDTO.getCount() );
+        subjectCategoryBO.setId( subjectCategoryDTO.getId() );
         subjectCategoryBO.setImageUrl( subjectCategoryDTO.getImageUrl() );
         subjectCategoryBO.setParentId( subjectCategoryDTO.getParentId() );
-        subjectCategoryBO.setCount( subjectCategoryDTO.getCount() );
 
         return subjectCategoryBO;
     }
@@ -53,12 +53,12 @@ public class SubjectCategoryDTOConverterImpl implements SubjectCategoryDTOConver
 
         SubjectCategoryDTO subjectCategoryDTO = new SubjectCategoryDTO();
 
-        subjectCategoryDTO.setId( subjectCategoryBO.getId() );
         subjectCategoryDTO.setCategoryName( subjectCategoryBO.getCategoryName() );
         subjectCategoryDTO.setCategoryType( subjectCategoryBO.getCategoryType() );
+        subjectCategoryDTO.setCount( subjectCategoryBO.getCount() );
+        subjectCategoryDTO.setId( subjectCategoryBO.getId() );
         subjectCategoryDTO.setImageUrl( subjectCategoryBO.getImageUrl() );
         subjectCategoryDTO.setParentId( subjectCategoryBO.getParentId() );
-        subjectCategoryDTO.setCount( subjectCategoryBO.getCount() );
 
         return subjectCategoryDTO;
     }

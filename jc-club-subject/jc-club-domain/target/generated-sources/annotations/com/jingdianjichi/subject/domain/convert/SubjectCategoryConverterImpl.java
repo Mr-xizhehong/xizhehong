@@ -8,8 +8,8 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-12-07T18:00:29+0800",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 1.8.0_421 (Oracle Corporation)"
+    date = "2024-12-26T15:57:01+0800",
+    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 3.40.0.z20241112-1021, environment: Java 17.0.13 (Eclipse Adoptium)"
 )
 public class SubjectCategoryConverterImpl implements SubjectCategoryConverter {
 
@@ -21,9 +21,9 @@ public class SubjectCategoryConverterImpl implements SubjectCategoryConverter {
 
         SubjectCategory subjectCategory = new SubjectCategory();
 
-        subjectCategory.setId( subjectCategoryBO.getId() );
         subjectCategory.setCategoryName( subjectCategoryBO.getCategoryName() );
         subjectCategory.setCategoryType( subjectCategoryBO.getCategoryType() );
+        subjectCategory.setId( subjectCategoryBO.getId() );
         subjectCategory.setImageUrl( subjectCategoryBO.getImageUrl() );
         subjectCategory.setParentId( subjectCategoryBO.getParentId() );
 
@@ -51,9 +51,9 @@ public class SubjectCategoryConverterImpl implements SubjectCategoryConverter {
 
         SubjectCategoryBO subjectCategoryBO = new SubjectCategoryBO();
 
-        subjectCategoryBO.setId( subjectCategory.getId() );
         subjectCategoryBO.setCategoryName( subjectCategory.getCategoryName() );
         subjectCategoryBO.setCategoryType( subjectCategory.getCategoryType() );
+        subjectCategoryBO.setId( subjectCategory.getId() );
         subjectCategoryBO.setImageUrl( subjectCategory.getImageUrl() );
         subjectCategoryBO.setParentId( subjectCategory.getParentId() );
 
