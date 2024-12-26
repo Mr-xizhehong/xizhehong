@@ -8,8 +8,8 @@ import javax.annotation.Generated;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2024-12-17T16:25:59+0800",
-    comments = "version: 1.4.2.Final, compiler: javac, environment: Java 1.8.0_421 (Oracle Corporation)"
+    date = "2024-12-26T15:49:28+0800",
+    comments = "version: 1.4.2.Final, compiler: Eclipse JDT (IDE) 3.40.0.z20241112-1021, environment: Java 17.0.13 (Eclipse Adoptium)"
 )
 public class AuthUserBOConverterImpl implements AuthUserBOConverter {
 
@@ -21,17 +21,17 @@ public class AuthUserBOConverterImpl implements AuthUserBOConverter {
 
         AuthUser authUser = new AuthUser();
 
-        authUser.setId( authUserBO.getId() );
-        authUser.setUserName( authUserBO.getUserName() );
-        authUser.setNickName( authUserBO.getNickName() );
-        authUser.setEmail( authUserBO.getEmail() );
-        authUser.setPhone( authUserBO.getPhone() );
-        authUser.setPassword( authUserBO.getPassword() );
-        authUser.setSex( authUserBO.getSex() );
         authUser.setAvatar( authUserBO.getAvatar() );
-        authUser.setStatus( authUserBO.getStatus() );
-        authUser.setIntroduce( authUserBO.getIntroduce() );
+        authUser.setEmail( authUserBO.getEmail() );
         authUser.setExtJson( authUserBO.getExtJson() );
+        authUser.setId( authUserBO.getId() );
+        authUser.setIntroduce( authUserBO.getIntroduce() );
+        authUser.setNickName( authUserBO.getNickName() );
+        authUser.setPassword( authUserBO.getPassword() );
+        authUser.setPhone( authUserBO.getPhone() );
+        authUser.setSex( authUserBO.getSex() );
+        authUser.setStatus( authUserBO.getStatus() );
+        authUser.setUserName( authUserBO.getUserName() );
 
         return authUser;
     }
@@ -44,17 +44,17 @@ public class AuthUserBOConverterImpl implements AuthUserBOConverter {
 
         AuthUserBO authUserBO = new AuthUserBO();
 
-        authUserBO.setId( authUser.getId() );
-        authUserBO.setUserName( authUser.getUserName() );
-        authUserBO.setNickName( authUser.getNickName() );
-        authUserBO.setEmail( authUser.getEmail() );
-        authUserBO.setPhone( authUser.getPhone() );
-        authUserBO.setPassword( authUser.getPassword() );
-        authUserBO.setSex( authUser.getSex() );
         authUserBO.setAvatar( authUser.getAvatar() );
-        authUserBO.setStatus( authUser.getStatus() );
-        authUserBO.setIntroduce( authUser.getIntroduce() );
+        authUserBO.setEmail( authUser.getEmail() );
         authUserBO.setExtJson( authUser.getExtJson() );
+        authUserBO.setId( authUser.getId() );
+        authUserBO.setIntroduce( authUser.getIntroduce() );
+        authUserBO.setNickName( authUser.getNickName() );
+        authUserBO.setPassword( authUser.getPassword() );
+        authUserBO.setPhone( authUser.getPhone() );
+        authUserBO.setSex( authUser.getSex() );
+        authUserBO.setStatus( authUser.getStatus() );
+        authUserBO.setUserName( authUser.getUserName() );
 
         return authUserBO;
     }

@@ -18,6 +18,7 @@ import org.elasticsearch.index.query.MatchQueryBuilder;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.SearchHits;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.SortOrder;
@@ -58,6 +59,9 @@ public class SubjectEsServiceImpl implements SubjectEsService {
     public PageResult<SubjectInfoEs> querySubjectList(SubjectInfoEs req) {
         PageResult<SubjectInfoEs> pageResult = new PageResult<>();
         EsSearchRequest esSearchRequest = createSearchListQuery(req);
+        esSearchRequest.setSortName("score");
+        SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+        searchSourceBuilder.sort("score", SortOrder.DESC);
         SearchResponse searchResponse = EsRestClient.searchWithTermQuery(getEsIndexInfo(), esSearchRequest);
 
         List<SubjectInfoEs> subjectInfoEsList = new LinkedList<>();
