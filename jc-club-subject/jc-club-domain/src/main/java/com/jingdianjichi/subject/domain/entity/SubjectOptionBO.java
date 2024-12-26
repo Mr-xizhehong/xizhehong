@@ -7,10 +7,8 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * 题目dto
+ * 题目BO
  *
- * @author: ChickenWing
- * @date: 2023/10/5
  */
 @Data
 public class SubjectOptionBO implements Serializable {

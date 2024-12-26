@@ -143,7 +143,9 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
         return pageResult;
     }
     
-    
+    /**
+     * 根据题目id查询题目具体内容
+     */
     @Override
     public SubjectInfoBO querySubjectInfo(SubjectInfoBO subjectInfoBO) {
         SubjectInfo subjectInfo = subjectInfoService.queryById(subjectInfoBO.getId());
