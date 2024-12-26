@@ -137,10 +137,11 @@ public class SubjectEsServiceImpl implements SubjectEsService {
                 QueryBuilders.matchQuery(EsSubjectFields.SUBJECT_ANSWER, req.getKeyWord());
         bq.should(subjectAnswerQueryBuilder);
 
-        MatchQueryBuilder subjectTypeQueryBuilder =
-                QueryBuilders.matchQuery(EsSubjectFields.SUBJECT_TYPE, SubjectInfoTypeEnum.BRIEF.getCode());
-        bq.must(subjectTypeQueryBuilder);
-        bq.minimumShouldMatch(1);
+        //只能查询简答题
+//        MatchQueryBuilder subjectTypeQueryBuilder =
+//                QueryBuilders.matchQuery(EsSubjectFields.SUBJECT_TYPE, SubjectInfoTypeEnum.BRIEF.getCode());
+//        bq.must(subjectTypeQueryBuilder);
+//        bq.minimumShouldMatch(1);
 
         HighlightBuilder highlightBuilder = new HighlightBuilder().field("*").requireFieldMatch(false);
         highlightBuilder.preTags("<span style = \"color:red\">");
