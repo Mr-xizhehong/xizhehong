@@ -24,10 +24,6 @@ import java.util.*;
         MappedStatement.class, Object.class
 })})
 public class MybatisInterceptor implements Interceptor {
-    
-    @Resource
-    private UserRpc userRpc;
-
     @Override
     public Object intercept(Invocation invocation) throws Throwable {
         MappedStatement mappedStatement = (MappedStatement) invocation.getArgs()[0];
@@ -41,9 +37,8 @@ public class MybatisInterceptor implements Interceptor {
         if (StringUtils.isBlank(loginId)) {
             return invocation.proceed();
         }
-        UserInfo userInfo = userRpc.getUserInfo(loginId);
         if (SqlCommandType.INSERT == sqlCommandType || SqlCommandType.UPDATE == sqlCommandType) {
-            replaceEntityProperty(parameter, userInfo.getNickName(), sqlCommandType);
+            replaceEntityProperty(parameter, loginId, sqlCommandType);
         }
         return invocation.proceed();
     }
