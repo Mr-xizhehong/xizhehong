@@ -22,9 +22,6 @@ import javax.annotation.Resource;
 
 /**
  * 题目点赞表 controller
- *
- * @author jingdianjichi
- * @since 2024-01-07 23:08:45
  */
 @RestController
 @RequestMapping("/subjectLiked/")
@@ -35,7 +32,7 @@ public class SubjectLikedController {
     private SubjectLikedDomainService subjectLikedDomainService;
 
     /**
-     * 新增题目点赞表
+     * 新增题目点赞表，给题目点赞
      */
     @RequestMapping("add")
     public Result<Boolean> add(@RequestBody SubjectLikedDTO subjectLikedDTO) {
@@ -49,8 +46,8 @@ public class SubjectLikedController {
             String loginId = LoginUtil.getLoginId();
             subjectLikedDTO.setLikeUserId(loginId);
             Preconditions.checkNotNull(subjectLikedDTO.getLikeUserId(), "点赞人不能为空");
-            SubjectLikedBO SubjectLikedBO = SubjectLikedDTOConverter.INSTANCE.convertDTOToBO(subjectLikedDTO);
-            subjectLikedDomainService.add(SubjectLikedBO);
+            SubjectLikedBO subjectLikedBO = SubjectLikedDTOConverter.INSTANCE.convertDTOToBO(subjectLikedDTO);
+            subjectLikedDomainService.add(subjectLikedBO);
             return Result.ok(true);
         } catch (Exception e) {
             log.error("SubjectLikedController.register.error:{}", e.getMessage(), e);

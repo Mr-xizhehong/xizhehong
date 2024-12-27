@@ -6,9 +6,6 @@ import com.jingdianjichi.subject.domain.entity.SubjectLikedBO;
 
 /**
  * 题目点赞表 领域service
- *
- * @author jingdianjichi
- * @since 2024-01-07 23:08:45
  */
 public interface SubjectLikedDomainService {
 

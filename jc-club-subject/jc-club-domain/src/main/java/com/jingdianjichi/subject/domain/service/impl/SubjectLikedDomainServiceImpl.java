@@ -55,6 +55,9 @@ public class SubjectLikedDomainServiceImpl implements SubjectLikedDomainService 
 
     private static final String SUBJECT_LIKED_DETAIL_KEY = "subject.liked.detail";
 
+    /**
+     * 给题目点赞
+     */
     @Override
     public void add(SubjectLikedBO subjectLikedBO) {
         Long subjectId = subjectLikedBO.getSubjectId();
@@ -68,14 +71,16 @@ public class SubjectLikedDomainServiceImpl implements SubjectLikedDomainService 
         subjectLikedMessage.setLikeUserId(likeUserId);
         subjectLikedMessage.setStatus(status);
         rocketMQTemplate.convertAndSend("subject-liked", JSON.toJSONString(subjectLikedMessage));
-
-
-
+        
         String detailKey = SUBJECT_LIKED_DETAIL_KEY + "." + subjectId + "." + likeUserId;
         String countKey = SUBJECT_LIKED_COUNT_KEY + "." + subjectId;
         if (SubjectLikedStatusEnum.LIKED.getCode() == status) {
+            if (!redisUtil.exist(detailKey)) {
             redisUtil.increment(countKey, 1);
             redisUtil.set(detailKey, "1");
+            } else {
+                log.info("用户 {} 已经给题目 {} 点过赞了", likeUserId, subjectId);
+            }
         } else {
             Integer count = redisUtil.getInt(countKey);
             if (Objects.isNull(count) || count <= 0) {
