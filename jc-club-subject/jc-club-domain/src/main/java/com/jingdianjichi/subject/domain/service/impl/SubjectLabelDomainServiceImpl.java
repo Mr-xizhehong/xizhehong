@@ -30,13 +30,7 @@ public class SubjectLabelDomainServiceImpl implements SubjectLabelDomainService 
 
     @Resource
     private SubjectLabelService subjectLabelService;
-
-    @Resource
-    private SubjectMappingService subjectMappingService;
-
-    @Resource
-    private SubjectCategoryService subjectCategoryService;
-
+    
     @Override
     public Boolean add(SubjectLabelBO subjectLabelBO) {
         if (log.isInfoEnabled()) {
