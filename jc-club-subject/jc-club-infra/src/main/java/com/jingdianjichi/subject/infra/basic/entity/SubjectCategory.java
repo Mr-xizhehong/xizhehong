@@ -7,9 +7,6 @@ import java.io.Serializable;
 
 /**
  * 题目分类(SubjectCategory)实体类
- *
- * @author makejava
- * @since 2023-10-01 21:49:59
  */
 @Data
 public class SubjectCategory implements Serializable {
