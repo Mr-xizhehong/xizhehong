@@ -21,12 +21,7 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- * <p>
- * 圈子信息 前端控制器
- * </p>
- *
- * @author ChickenWing
- * @since 2024/05/16
+ * 圈子种类Controller
  */
 @Slf4j
 @RestController

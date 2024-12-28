@@ -17,12 +17,7 @@ import javax.annotation.Resource;
 import java.util.Objects;
 
 /**
- * <p>
- * 圈子信息 前端控制器
- * </p>
  *
- * @author ChickenWing
- * @since 2024/05/16
  */
 @Slf4j
 @RestController

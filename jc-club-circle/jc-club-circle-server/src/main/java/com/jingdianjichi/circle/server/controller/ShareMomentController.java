@@ -22,12 +22,7 @@ import javax.annotation.Resource;
 import java.util.Objects;
 
 /**
- * <p>
- * 动态信息 前端控制器
- * </p>
- *
- * @author ChickenWing
- * @since 2024/05/16
+ *发布动态信息Controller
  */
 @Slf4j
 @RestController

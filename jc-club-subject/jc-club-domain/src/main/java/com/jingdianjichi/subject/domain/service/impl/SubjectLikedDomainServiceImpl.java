@@ -106,11 +106,7 @@ public class SubjectLikedDomainServiceImpl implements SubjectLikedDomainService 
         }
         return redisUtil.getInt(countKey);
     }
-
-    private String buildSubjectLikedKey(String subjectId, String userId) {
-        return subjectId + ":" + userId;
-    }
-
+    
     @Override
     public Boolean update(SubjectLikedBO subjectLikedBO) {
         SubjectLiked subjectLiked = SubjectLikedBOConverter.INSTANCE.convertBOToEntity(subjectLikedBO);
@@ -125,6 +121,9 @@ public class SubjectLikedDomainServiceImpl implements SubjectLikedDomainService 
         return subjectLikedService.update(subjectLiked) > 0;
     }
 
+    /**
+     * xxl-job定时同步点赞信息到数据库
+     */
     @Override
     public void syncLiked() {
         Map<Object, Object> subjectLikedMap = redisUtil.getHashAndDelete(SUBJECT_LIKED_KEY);

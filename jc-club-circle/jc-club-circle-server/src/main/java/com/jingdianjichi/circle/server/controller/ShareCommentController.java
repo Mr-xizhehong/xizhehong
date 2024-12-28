@@ -29,11 +29,7 @@ import java.util.Objects;
 
 /**
  * <p>
- * 回复及评论 前端控制器
- * </p>
- *
- * @author ChickenWing
- * @since 2024/05/16
+ * 回复及评论Controller
  */
 @Slf4j
 @RestController
