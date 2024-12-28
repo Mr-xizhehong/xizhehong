@@ -8,7 +8,6 @@ import java.util.Date;
 
 /**
  * 题目点赞表 bo
- *
  */
 @Data
 public class SubjectLikedBO extends PageInfo implements Serializable {

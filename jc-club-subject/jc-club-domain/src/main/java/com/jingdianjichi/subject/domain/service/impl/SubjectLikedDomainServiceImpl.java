@@ -164,12 +164,12 @@ public class SubjectLikedDomainServiceImpl implements SubjectLikedDomainService 
         }
         List<SubjectLiked> subjectLikedList = subjectLikedService.queryPage(subjectLiked, start,
                 subjectLikedBO.getPageSize());
-        List<SubjectLikedBO> subjectInfoBOS = SubjectLikedBOConverter.INSTANCE.convertListInfoToBO(subjectLikedList);
-        subjectInfoBOS.forEach(info -> {
-            SubjectInfo subjectInfo = subjectInfoService.queryById(info.getSubjectId());
-            info.setSubjectName(subjectInfo.getSubjectName());
+        List<SubjectLikedBO> subjectLikedBOS = SubjectLikedBOConverter.INSTANCE.convertListInfoToBO(subjectLikedList);
+        subjectLikedBOS.forEach(liked -> {
+            SubjectInfo subjectInfo = subjectInfoService.queryById(liked.getSubjectId());
+            liked.setSubjectName(subjectInfo.getSubjectName());
         });
-        pageResult.setRecords(subjectInfoBOS);
+        pageResult.setRecords(subjectLikedBOS);
         pageResult.setTotal(count);
         return pageResult;
     }
