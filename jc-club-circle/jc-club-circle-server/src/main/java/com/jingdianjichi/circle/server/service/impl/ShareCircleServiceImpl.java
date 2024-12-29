@@ -27,12 +27,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
- * <p>
  * 圈子信息 服务实现类
- * </p>
- *
- * @author ChickenWing
- * @since 2024/05/16
  */
 @Service
 public class ShareCircleServiceImpl extends ServiceImpl<ShareCircleMapper, ShareCircle> implements ShareCircleService {

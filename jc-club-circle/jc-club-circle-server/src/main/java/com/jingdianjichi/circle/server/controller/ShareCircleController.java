@@ -34,7 +34,7 @@ public class ShareCircleController {
     /**
      * 圈子查询
      */
-    @GetMapping(value = "/list")
+    @GetMapping(value = "/queryList")
     public Result<List<ShareCircleVO>> listResult() {
         try {
             List<ShareCircleVO> result = shareCircleService.listResult();
