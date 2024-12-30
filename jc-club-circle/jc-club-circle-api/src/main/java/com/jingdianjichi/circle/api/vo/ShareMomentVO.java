@@ -7,12 +7,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * <p>
  * 动态信息
- * </p>
- *
- * @author ChickenWing
- * @since 2024/05/16
  */
 @Getter
 @Setter

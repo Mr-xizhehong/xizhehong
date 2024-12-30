@@ -9,12 +9,7 @@ import com.jingdianjichi.circle.api.vo.ShareMomentVO;
 import com.jingdianjichi.circle.server.entity.po.ShareMoment;
 
 /**
- * <p>
  * 动态信息 服务类
- * </p>
- *
- * @author ChickenWing
- * @since 2024/05/16
  */
 public interface ShareMomentService extends IService<ShareMoment> {
 

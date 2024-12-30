@@ -22,6 +22,7 @@ import com.jingdianjichi.circle.server.entity.po.ShareMoment;
 import com.jingdianjichi.circle.server.rpc.UserRpc;
 import com.jingdianjichi.circle.server.service.ShareMomentService;
 import com.jingdianjichi.circle.server.util.LoginUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -34,14 +35,10 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- * <p>
  * 动态信息 服务实现类
- * </p>
- *
- * @author ChickenWing
- * @since 2024/05/16
  */
 @Service
+@Slf4j
 public class ShareMomentServiceImpl extends ServiceImpl<ShareMomentMapper, ShareMoment> implements ShareMomentService {
 
     @Resource
@@ -81,6 +78,7 @@ public class ShareMomentServiceImpl extends ServiceImpl<ShareMomentMapper, Share
         List<String> userNameList = records.stream().map(ShareMoment::getCreatedBy).distinct().collect(Collectors.toList());
         Map<String, UserInfo> userInfoMap = userRpc.batchGetUserInfo(userNameList);
         UserInfo defaultUser = new UserInfo();
+        //通过createBy（LoginId）得到nickName及用户头像并转成VO
         List<ShareMomentVO> list = records.stream().map(item -> {
             ShareMomentVO vo = new ShareMomentVO();
             vo.setId(item.getId());
@@ -103,17 +101,35 @@ public class ShareMomentServiceImpl extends ServiceImpl<ShareMomentMapper, Share
         result.setPageNo(pageInfo.getPageNo());
         return result;
     }
-
+    
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean removeMoment(RemoveShareMomentReq req) {
-        ShareCommentReply updateEntity = new ShareCommentReply();
-        updateEntity.setIsDeleted(IsDeletedFlagEnum.DELETED.getCode());
-        LambdaUpdateWrapper<ShareCommentReply> update = Wrappers.<ShareCommentReply>lambdaUpdate().eq(ShareCommentReply::getMomentId, req.getId());
-        shareCommentReplyMapper.update(updateEntity, update);
-        return super.update(Wrappers.<ShareMoment>lambdaUpdate().eq(ShareMoment::getId, req.getId())
+        // 级联删除相关评论和回复
+        try {
+            ShareCommentReply updateEntity = new ShareCommentReply();
+            updateEntity.setIsDeleted(IsDeletedFlagEnum.DELETED.getCode());
+            LambdaUpdateWrapper<ShareCommentReply> updateWrapper = Wrappers.<ShareCommentReply>lambdaUpdate()
+                    .eq(ShareCommentReply::getMomentId, req.getId());
+            int updatedCount = shareCommentReplyMapper.update(updateEntity, updateWrapper);
+            log.info("Removed {} comment(s) and reply(s) for moment id: {}", updatedCount, req.getId());
+        } catch (Exception e) {
+            log.error("Failed to remove comments and replies for moment id: {}", req.getId(), e);
+            throw new RuntimeException("Failed to remove associated comments and replies", e);
+        }
+        
+        // 删除动态
+        boolean momentRemoved = super.update(Wrappers.<ShareMoment>lambdaUpdate()
+                .eq(ShareMoment::getId, req.getId())
                 .eq(ShareMoment::getIsDeleted, IsDeletedFlagEnum.UN_DELETED.getCode())
                 .set(ShareMoment::getIsDeleted, IsDeletedFlagEnum.DELETED.getCode()));
+        
+        if (!momentRemoved) {
+            log.error("Failed to remove ShareMoment with id: {}", req.getId());
+            throw new RuntimeException("Failed to remove ShareMoment");
+        }
+        
+        return true;
     }
 
     @Override

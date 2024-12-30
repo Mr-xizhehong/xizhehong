@@ -10,12 +10,7 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * <p>
- * 动态信息
- * </p>
- *
- * @author ChickenWing
- * @since 2024/05/16
+ * 动态信息实体
  */
 @Getter
 @Setter
