@@ -35,12 +35,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
- * <p>
  * 评论及回复信息 服务实现类
- * </p>
- *
- * @author ChickenWing
- * @since 2024/05/16
  */
 @Service
 public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyMapper, ShareCommentReply> implements ShareCommentReplyService {
@@ -74,7 +69,7 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
         if (!CollectionUtils.isEmpty(req.getPicUrlList())) {
             comment.setPicUrls(JSON.toJSONString(req.getPicUrlList()));
         }
-        comment.setCreatedBy(LoginUtil.getLoginId());
+        comment.setCreatedBy(loginId);
         comment.setCreatedTime(new Date());
         comment.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         shareMomentMapper.incrReplyCount(moment.getId(), 1);
