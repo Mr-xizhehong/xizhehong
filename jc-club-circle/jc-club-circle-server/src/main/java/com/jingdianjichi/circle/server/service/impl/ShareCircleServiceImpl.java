@@ -15,6 +15,7 @@ import com.jingdianjichi.circle.server.entity.po.ShareCircle;
 import com.jingdianjichi.circle.server.service.ShareCircleService;
 import com.jingdianjichi.circle.server.util.LoginUtil;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.time.Duration;
@@ -35,12 +36,18 @@ public class ShareCircleServiceImpl extends ServiceImpl<ShareCircleMapper, Share
     private static final Cache<Integer, List<ShareCircleVO>> CACHE = Caffeine.newBuilder().initialCapacity(1)
             .maximumSize(1).expireAfterWrite(Duration.ofSeconds(30)).build();
 
+    /**
+     * 获取圈子列表
+     */
     @Override
     public List<ShareCircleVO> listResult() {
         List<ShareCircleVO> res = CACHE.getIfPresent(1);
         return Optional.ofNullable(res).orElseGet(() -> {
+            //通过mybatis-plus的查询接口获取所有圈子数据
             List<ShareCircle> list = super.list(Wrappers.<ShareCircle>lambdaQuery().eq(ShareCircle::getIsDeleted, IsDeletedFlagEnum.UN_DELETED.getCode()));
+            //通过stream流过滤出圈子大类
             List<ShareCircle> parentList = list.stream().filter(item -> item.getParentId() == -1L).collect(Collectors.toList());
+            //通过stream流,依靠parentId获取分组
             Map<Long, List<ShareCircle>> map = list.stream().collect(Collectors.groupingBy(ShareCircle::getParentId));
             List<ShareCircleVO> collect = parentList.stream().map(item -> {
                 ShareCircleVO vo = new ShareCircleVO();
@@ -69,6 +76,7 @@ public class ShareCircleServiceImpl extends ServiceImpl<ShareCircleMapper, Share
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean saveCircle(SaveShareCircleReq req) {
         ShareCircle circle = new ShareCircle();
         circle.setCircleName(req.getCircleName());
@@ -77,8 +85,22 @@ public class ShareCircleServiceImpl extends ServiceImpl<ShareCircleMapper, Share
         circle.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         circle.setCreatedTime(new Date());
         circle.setCreatedBy(LoginUtil.getLoginId());
-        CACHE.invalidateAll();
-        return save(circle);
+        // 清空缓存数据，确保缓存和数据库的一致性
+        try {
+            // 在执行数据库操作之前清除缓存，避免缓存不一致
+            CACHE.invalidateAll();
+        } catch (Exception e) {
+            log.error("Failed to invalidate cache", e);
+        }
+        // 执行数据库保存操作
+        boolean saveSuccess = save(circle);
+        if (!saveSuccess) {
+            log.error("Failed to save ShareCircle");
+            // 可以根据需要抛出异常来回滚事务
+            throw new RuntimeException("Failed to save ShareCircle");
+        }
+        
+        return saveSuccess;
     }
 
     @Override
