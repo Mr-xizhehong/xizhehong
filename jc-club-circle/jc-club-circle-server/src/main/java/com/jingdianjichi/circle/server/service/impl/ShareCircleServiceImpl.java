@@ -14,6 +14,7 @@ import com.jingdianjichi.circle.server.dao.ShareCircleMapper;
 import com.jingdianjichi.circle.server.entity.po.ShareCircle;
 import com.jingdianjichi.circle.server.service.ShareCircleService;
 import com.jingdianjichi.circle.server.util.LoginUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -31,6 +32,7 @@ import java.util.stream.Collectors;
  * 圈子信息 服务实现类
  */
 @Service
+@Slf4j
 public class ShareCircleServiceImpl extends ServiceImpl<ShareCircleMapper, ShareCircle> implements ShareCircleService {
 
     private static final Cache<Integer, List<ShareCircleVO>> CACHE = Caffeine.newBuilder().initialCapacity(1)
@@ -102,30 +104,59 @@ public class ShareCircleServiceImpl extends ServiceImpl<ShareCircleMapper, Share
         
         return saveSuccess;
     }
-
+    
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean updateCircle(UpdateShareCircleReq req) {
-        LambdaUpdateWrapper<ShareCircle> update = Wrappers.<ShareCircle>lambdaUpdate().eq(ShareCircle::getId, req.getId())
+        LambdaUpdateWrapper<ShareCircle> update = Wrappers.<ShareCircle>lambdaUpdate()
+                .eq(ShareCircle::getId, req.getId())
                 .eq(ShareCircle::getIsDeleted, IsDeletedFlagEnum.UN_DELETED.getCode())
                 .set(Objects.nonNull(req.getParentId()), ShareCircle::getParentId, req.getParentId())
                 .set(Objects.nonNull(req.getIcon()), ShareCircle::getIcon, req.getIcon())
                 .set(Objects.nonNull(req.getCircleName()), ShareCircle::getCircleName, req.getCircleName())
                 .set(ShareCircle::getUpdateBy, LoginUtil.getLoginId())
                 .set(ShareCircle::getUpdateTime, new Date());
-        boolean res = super.update(update);
-        CACHE.invalidateAll();
-        return res;
+        
+        try {
+            // 清理缓存数据，确保缓存与数据库数据一致性
+            CACHE.invalidateAll();
+        } catch (Exception e) {
+            log.error("Failed to invalidate cache before updating ShareCircle with id: {}", req.getId(), e);
+        }
+        // 执行数据库更新操作
+        boolean updateSuccess = super.update(update);
+        
+        if (!updateSuccess) {
+            log.error("Failed to update ShareCircle with id: {}", req.getId());
+            // 抛出异常触发事务回滚
+            throw new RuntimeException("Failed to update ShareCircle");
+        }
+        return true;
     }
 
+    
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Boolean removeCircle(RemoveShareCircleReq req) {
+        // 删除自身
         boolean res = super.update(Wrappers.<ShareCircle>lambdaUpdate().eq(ShareCircle::getId, req.getId())
                 .eq(ShareCircle::getIsDeleted, IsDeletedFlagEnum.UN_DELETED.getCode())
                 .set(ShareCircle::getIsDeleted, IsDeletedFlagEnum.DELETED.getCode()));
-        super.update(Wrappers.<ShareCircle>lambdaUpdate().eq(ShareCircle::getParentId, req.getId())
+        
+        // 删除子圈子
+        boolean childRes = super.update(Wrappers.<ShareCircle>lambdaUpdate().eq(ShareCircle::getParentId, req.getId())
                 .eq(ShareCircle::getIsDeleted, IsDeletedFlagEnum.UN_DELETED.getCode())
                 .set(ShareCircle::getIsDeleted, IsDeletedFlagEnum.DELETED.getCode()));
-        CACHE.invalidateAll();
-        return res;
+        
+        if (res && childRes) {
+            // 如果都删除成功，清空缓存
+            CACHE.invalidateAll();
+            return true;
+        } else {
+            log.error("Failed to remove ShareCircle with id:{}", req.getId());
+            // 删除失败时，可以抛出异常来回滚事务
+            throw new RuntimeException("Failed to remove ShareCircle");
+        }
     }
+
 }
