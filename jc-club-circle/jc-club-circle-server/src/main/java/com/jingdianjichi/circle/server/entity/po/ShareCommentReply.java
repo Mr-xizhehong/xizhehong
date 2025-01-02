@@ -37,32 +37,32 @@ public class ShareCommentReply extends TreeNode implements Serializable {
     private Integer replyType;
 
     /**
-     * 评论目标id
+     * 被评论目标id
      */
     private Long toId;
 
     /**
-     * 评论人
+     * 被评论人
      */
     private String toUser;
 
     /**
-     * 评论人是否作者 1=是 0=否
+     * 被评论人是否作者 1=是 0=否
      */
     private Integer toUserAuthor;
 
     /**
-     * 回复目标id
+     * 被回复目标id
      */
     private Long replyId;
 
     /**
-     * 回复人
+     * 被回复人
      */
     private String replyUser;
 
     /**
-     * 回复人是否作者 1=是 0=否
+     * 被回复人是否作者 1=是 0=否
      */
     private Integer replayAuthor;
 
