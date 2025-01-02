@@ -91,7 +91,7 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
                         ShareCommentReply::getCreatedBy,
                         ShareCommentReply::getToUser,
                         ShareCommentReply::getParentId);
-        List<ShareCommentReply> list = list(query);
+        List<ShareCommentReply> list = super.list(query);
         List<ShareCommentReply> replyList = new ArrayList<>();
         List<ShareCommentReply> tree = TreeUtils.buildTree(list);
         for (ShareCommentReply reply : tree) {
