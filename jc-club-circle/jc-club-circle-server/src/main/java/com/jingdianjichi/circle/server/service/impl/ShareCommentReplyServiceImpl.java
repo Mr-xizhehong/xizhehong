@@ -44,8 +44,6 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
     private ShareMomentMapper shareMomentMapper;
     @Resource
     private UserRpc userRpc;
-    @Resource
-    private ShareCommentReplyMapper shareCommentReplyMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -62,7 +60,7 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
             comment.setToUser(moment.getCreatedBy());
             comment.setToUserAuthor(Objects.nonNull(moment.getCreatedBy()) && loginId.equals(moment.getCreatedBy()) ? 1 : 0);
         } else {
-            ShareCommentReply shareCommentReply = shareCommentReplyMapper.selectById(req.getTargetId());
+            ShareCommentReply shareCommentReply = super.getById(req.getTargetId());
             comment.setParentId(req.getTargetId());
             comment.setReplyId(req.getTargetId());
             comment.setReplyUser(shareCommentReply.getCreatedBy());
@@ -82,7 +80,7 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean removeComment(RemoveShareCommentReq req) {
-        ShareCommentReply comment = getById(req.getId());
+        ShareCommentReply comment = super.getById(req.getId());
         LambdaQueryWrapper<ShareCommentReply> query = Wrappers.<ShareCommentReply>lambdaQuery()
                 .eq(ShareCommentReply::getMomentId, comment.getMomentId())
                 .eq(ShareCommentReply::getIsDeleted, IsDeletedFlagEnum.UN_DELETED.getCode()).select(ShareCommentReply::getId,
