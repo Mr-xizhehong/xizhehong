@@ -91,20 +91,23 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
                         ShareCommentReply::getCreatedBy,
                         ShareCommentReply::getToUser,
                         ShareCommentReply::getParentId);
+        //通过momentId查询出所有评论和回复
         List<ShareCommentReply> list = super.list(query);
         List<ShareCommentReply> replyList = new ArrayList<>();
         List<ShareCommentReply> tree = TreeUtils.buildTree(list);
+        //通过树状工具类，找到某个节点id的所有子级节点
         for (ShareCommentReply reply : tree) {
             TreeUtils.findAll(replyList, reply, req.getId());
         }
-        // 关联子级对象及 moment 的回复数量
+        // 得到所有子级节点的id
         Set<Long> ids = replyList.stream().map(ShareCommentReply::getId).collect(Collectors.toSet());
+        //自定义Mapper执行更新获取count
         LambdaUpdateWrapper<ShareCommentReply> update = Wrappers.<ShareCommentReply>lambdaUpdate()
                 .eq(ShareCommentReply::getMomentId, comment.getMomentId())
                 .in(ShareCommentReply::getId, ids);
         ShareCommentReply updateEntity = new ShareCommentReply();
         updateEntity.setIsDeleted(IsDeletedFlagEnum.DELETED.getCode());
-        int count = getBaseMapper().update(updateEntity, update);
+        int count = super.getBaseMapper().update(updateEntity, update);
         shareMomentMapper.incrReplyCount(comment.getMomentId(), -count);
         return true;
     }
