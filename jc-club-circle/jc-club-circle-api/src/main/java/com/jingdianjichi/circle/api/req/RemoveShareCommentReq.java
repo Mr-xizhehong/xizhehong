@@ -9,6 +9,9 @@ import java.io.Serializable;
 @Setter
 public class RemoveShareCommentReq implements Serializable {
 
+    /**
+     * 回复或者评论id
+     */
     private Long id;
 
     /**

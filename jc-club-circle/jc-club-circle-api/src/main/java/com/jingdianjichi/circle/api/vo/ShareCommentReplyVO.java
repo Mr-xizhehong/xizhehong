@@ -8,12 +8,7 @@ import java.io.Serializable;
 import java.util.List;
 
 /**
- * <p>
  * 评论及回复信息
- * </p>
- *
- * @author ChickenWing
- * @since 2024/05/16
  */
 @Getter
 @Setter
@@ -43,8 +38,14 @@ public class ShareCommentReplyVO extends TreeNode implements Serializable {
      */
     private List<String> picUrlList;
 
+    /**
+     * 发布人
+     */
     private String fromId;
 
+    /**
+     * 被回复人
+     */
     private String toId;
 
     private Long parentId;

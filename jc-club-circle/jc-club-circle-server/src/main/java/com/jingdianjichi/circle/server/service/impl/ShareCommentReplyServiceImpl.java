@@ -53,6 +53,7 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
         comment.setMomentId(req.getMomentId());
         comment.setReplyType(req.getReplyType());
         String loginId = LoginUtil.getLoginId();
+        
         // 1评论 2回复
         if (req.getReplyType() == 1) {
             comment.setParentId(-1L);
@@ -80,6 +81,7 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean removeComment(RemoveShareCommentReq req) {
+        //通过momentId查询出所有评论和回复
         ShareCommentReply comment = super.getById(req.getId());
         LambdaQueryWrapper<ShareCommentReply> query = Wrappers.<ShareCommentReply>lambdaQuery()
                 .eq(ShareCommentReply::getMomentId, comment.getMomentId())
@@ -91,14 +93,15 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
                         ShareCommentReply::getCreatedBy,
                         ShareCommentReply::getToUser,
                         ShareCommentReply::getParentId);
-        //通过momentId查询出所有评论和回复
         List<ShareCommentReply> list = super.list(query);
+        
+        //通过树状工具类，找到某个节点id的所有子级节点
         List<ShareCommentReply> replyList = new ArrayList<>();
         List<ShareCommentReply> tree = TreeUtils.buildTree(list);
-        //通过树状工具类，找到某个节点id的所有子级节点
         for (ShareCommentReply reply : tree) {
             TreeUtils.findAll(replyList, reply, req.getId());
         }
+        
         // 得到所有子级节点的id
         Set<Long> ids = replyList.stream().map(ShareCommentReply::getId).collect(Collectors.toSet());
         //自定义Mapper执行更新获取count
@@ -114,6 +117,7 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
 
     @Override
     public List<ShareCommentReplyVO> listComment(GetShareCommentReq req) {
+        // 通过momentId查询出所有评论和回复
         LambdaQueryWrapper<ShareCommentReply> query = Wrappers.<ShareCommentReply>lambdaQuery()
                 .eq(ShareCommentReply::getMomentId, req.getId())
                 .eq(ShareCommentReply::getIsDeleted, IsDeletedFlagEnum.UN_DELETED.getCode())
@@ -124,9 +128,11 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
                         ShareCommentReply::getPicUrls,
                         ShareCommentReply::getCreatedBy,
                         ShareCommentReply::getToUser,
+                        ShareCommentReply::getReplyUser,
                         ShareCommentReply::getCreatedTime,
                         ShareCommentReply::getParentId);
         List<ShareCommentReply> list = list(query);
+        
         List<String> userNameList = list.stream().map(ShareCommentReply::getCreatedBy).distinct().collect(Collectors.toList());
         Map<String, UserInfo> userInfoMap = userRpc.batchGetUserInfo(userNameList);
         UserInfo defaultUser = new UserInfo();
@@ -141,7 +147,7 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
             }
             if (item.getReplyType() == 2) {
                 vo.setFromId(item.getCreatedBy());
-                vo.setToId(item.getToUser());
+                vo.setToId(item.getReplyUser());
             }
             vo.setParentId(item.getParentId());
             UserInfo user = userInfoMap.getOrDefault(item.getCreatedBy(), defaultUser);
