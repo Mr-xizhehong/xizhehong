@@ -12,7 +12,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 @Slf4j
-@ServerEndpoint(value = "/chicken/socket", configurator = WebSocketServerConfig.class)
+@ServerEndpoint(value = "/xzh/socket", configurator = WebSocketServerConfig.class)
 @Component
 public class ChickenSocket {
 

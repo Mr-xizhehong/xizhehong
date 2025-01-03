@@ -38,9 +38,10 @@ public class ShareMessageServiceImpl extends ServiceImpl<ShareMessageMapper, Sha
     @Resource
     private UserRpc userRpc;
 
+    //查看信息
     @Override
     public PageResult<ShareMessageVO> getMessages(GetShareMessageReq req) {
-
+        //得到所有未读或者已读信息
         LambdaQueryWrapper<ShareMessage> query = Wrappers.<ShareMessage>lambdaQuery()
                 .eq(ShareMessage::getToId, LoginUtil.getLoginId())
                 .eq(ShareMessage::getIsRead, req.getIsRead())
@@ -51,11 +52,14 @@ public class ShareMessageServiceImpl extends ServiceImpl<ShareMessageMapper, Sha
         Page<ShareMessage> pageRes = super.page(page, query);
         PageResult<ShareMessageVO> result = new PageResult<>();
         List<ShareMessage> records = pageRes.getRecords();
-        if (CollectionUtils.isNotEmpty(records)) {
+        
+        //将未读信息设置为已读
+        if (CollectionUtils.isNotEmpty(records) && req.getIsRead().equals(1)) {
             List<Long> ids = records.stream().map(ShareMessage::getId).collect(Collectors.toList());
             LambdaUpdateWrapper<ShareMessage> update = Wrappers.<ShareMessage>lambdaUpdate().set(ShareMessage::getIsRead, 1).in(ShareMessage::getId, ids);
             super.update(update);
         }
+        
         List<ShareMessageVO> list = records.stream().map(item -> {
             ShareMessageVO vo = new ShareMessageVO();
             vo.setId(item.getId());

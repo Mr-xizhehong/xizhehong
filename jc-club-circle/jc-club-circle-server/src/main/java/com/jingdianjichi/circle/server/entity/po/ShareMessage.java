@@ -9,14 +9,6 @@ import lombok.Setter;
 import java.io.Serializable;
 import java.util.Date;
 
-/**
- * <p>
- * 消息表
- * </p>
- *
- * @author ChickenWing
- * @since 2024/05/18
- */
 @Getter
 @Setter
 @TableName("share_message")
