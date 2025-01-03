@@ -9,9 +9,6 @@ import java.util.List;
 
 /**
  * 题目分类关系表(SubjectMapping)表数据库访问层
- *
- * @author makejava
- * @since 2023-10-03 22:17:07
  */
 public interface SubjectMappingDao {
 

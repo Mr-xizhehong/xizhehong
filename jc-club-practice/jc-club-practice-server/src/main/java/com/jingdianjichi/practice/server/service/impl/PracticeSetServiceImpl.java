@@ -77,10 +77,13 @@ public class PracticeSetServiceImpl implements PracticeSetService {
             return specialPracticeVOList;
         }
         poList.forEach(primaryCategoryPO -> {
+            //得到一级分类
             SpecialPracticeVO specialPracticeVO = new SpecialPracticeVO();
             specialPracticeVO.setPrimaryCategoryId(primaryCategoryPO.getParentId());
             CategoryPO categoryPO = subjectCategoryDao.selectById(primaryCategoryPO.getParentId());
             specialPracticeVO.setPrimaryCategoryName(categoryPO.getCategoryName());
+            
+            //得到一级分类对应的二级分类
             CategoryDTO categoryDTOTemp = new CategoryDTO();
             categoryDTOTemp.setCategoryType(2);
             categoryDTOTemp.setParentId(primaryCategoryPO.getParentId());
@@ -88,6 +91,8 @@ public class PracticeSetServiceImpl implements PracticeSetService {
             if (CollectionUtils.isEmpty(smallPoList)) {
                 return;
             }
+            
+            //得到二级分类对应的标签
             List<SpecialPracticeCategoryVO> categoryList = new LinkedList();
             smallPoList.forEach(smallPo -> {
                 List<SpecialPracticeLabelVO> labelVOList = getLabelVOList(smallPo.getId(), subjectTypeList);
@@ -97,6 +102,8 @@ public class PracticeSetServiceImpl implements PracticeSetService {
                 SpecialPracticeCategoryVO specialPracticeCategoryVO = new SpecialPracticeCategoryVO();
                 specialPracticeCategoryVO.setCategoryId(smallPo.getId());
                 specialPracticeCategoryVO.setCategoryName(smallPo.getCategoryName());
+                
+                //为不直接对象进行修改，重新进行映射以保证数据库查询结果的纯洁性
                 List<SpecialPracticeLabelVO> labelList = new LinkedList<>();
                 labelVOList.forEach(labelVo -> {
                     SpecialPracticeLabelVO specialPracticeLabelVO = new SpecialPracticeLabelVO();
@@ -105,9 +112,13 @@ public class PracticeSetServiceImpl implements PracticeSetService {
                     specialPracticeLabelVO.setLabelName(labelVo.getLabelName());
                     labelList.add(specialPracticeLabelVO);
                 });
+                
+                //二级分类获取标签遍历结束，将得到的结果放入specialPracticeCategoryVO
                 specialPracticeCategoryVO.setLabelList(labelList);
                 categoryList.add(specialPracticeCategoryVO);
             });
+            
+            //一级分类获取二级分类遍历结束，将得到的结果放入specialPracticeVO中
             specialPracticeVO.setCategoryList(categoryList);
             specialPracticeVOList.add(specialPracticeVO);
         });

@@ -5,6 +5,7 @@ import lombok.Data;
 import java.io.Serializable;
 import java.util.List;
 
+//一级分类
 @Data
 public class SpecialPracticeVO implements Serializable {
 
