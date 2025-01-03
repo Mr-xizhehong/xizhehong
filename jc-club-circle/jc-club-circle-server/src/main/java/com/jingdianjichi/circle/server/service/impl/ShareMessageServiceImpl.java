@@ -75,11 +75,11 @@ public class ShareMessageServiceImpl extends ServiceImpl<ShareMessageMapper, Sha
 
     }
 
+    //评论时，向被评论者发送信息
     @Override
     public void comment(String fromId, String toId, Long targetId) {
 
         JSONObject message = new JSONObject();
-        // 1=评论 2=回复
         message.put("msgType", "COMMENT");
         message.put("msg", "评论了你的内容，快来看看把");
         message.put("targetId", targetId);
@@ -98,10 +98,10 @@ public class ShareMessageServiceImpl extends ServiceImpl<ShareMessageMapper, Sha
         super.save(shareMessage);
 
     }
-
+    
+    //回复评论时，向被评论者发送信息
     @Override
     public void reply(String fromId, String toId, Long targetId) {
-
         JSONObject message = new JSONObject();
         // 1=评论 2=回复
         message.put("msgType", "COMMENT_REPLY");
@@ -123,6 +123,7 @@ public class ShareMessageServiceImpl extends ServiceImpl<ShareMessageMapper, Sha
 
     }
 
+    //查看是否有未读信息
     @Override
     public Boolean unRead() {
         LambdaQueryWrapper<ShareMessage> query = Wrappers.<ShareMessage>lambdaQuery()

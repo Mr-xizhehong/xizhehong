@@ -10,9 +10,6 @@ import javax.servlet.http.HttpServletResponse;
 
 /**
  * 登录拦截器
- *
- * @author: ChickenWing
- * @date: 2023/11/26
  */
 public class LoginInterceptor implements HandlerInterceptor {
 

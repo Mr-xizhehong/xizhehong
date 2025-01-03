@@ -61,9 +61,11 @@ public class ShareCommentController {
             Preconditions.checkArgument((Objects.nonNull(req.getContent()) || Objects.nonNull(req.getPicUrlList())), "内容不能为空！");
             wordFilter.check(req.getContent());
             Boolean result = shareCommentReplyService.saveComment(req);
+            //如果是评论动态
             if (req.getReplyType() == 1) {
                 shareMessageService.comment(LoginUtil.getLoginId(), moment.getCreatedBy(), moment.getId());
             } else {
+                //如果是回复评论
                 LambdaQueryWrapper<ShareCommentReply> query = Wrappers.<ShareCommentReply>lambdaQuery()
                         .eq(ShareCommentReply::getId, req.getTargetId())
                         .select(ShareCommentReply::getCreatedBy);
