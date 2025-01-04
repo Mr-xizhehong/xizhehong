@@ -31,6 +31,9 @@ public class PracticeSetController {
     @Resource
     private PracticeSetService practiceSetService;
 
+    /**
+     * 得到所有的专项练习name
+     */
     @RequestMapping("getSpecialPracticeContent")
     public Result<List<SpecialPracticeVO>> getSpecialPracticeContent() {
         try {
@@ -47,10 +50,10 @@ public class PracticeSetController {
     }
 
     /**
-     * 开始练习
+     * 得到并生成练习题id
      */
     @PostMapping(value = "/addPractice")
-    public Result<PracticeSetVO> addPractice(@RequestBody GetPracticeSubjectListReq req) {
+    public Result<PracticeSetVO> getAndAddPractice(@RequestBody GetPracticeSubjectListReq req) {
         if (log.isInfoEnabled()) {
             log.info("获取练习题入参{}", JSON.toJSONString(req));
         }
@@ -60,7 +63,7 @@ public class PracticeSetController {
             Preconditions.checkArgument(!CollectionUtils.isEmpty(req.getAssembleIds()), "标签ids不能为空！");
             PracticeSubjectDTO dto = new PracticeSubjectDTO();
             dto.setAssembleIds(req.getAssembleIds());
-            PracticeSetVO practiceSetVO = practiceSetService.addPractice(dto);
+            PracticeSetVO practiceSetVO = practiceSetService.getAndAddPractice(dto);
             if (log.isInfoEnabled()) {
                 log.info("获取练习题目列表出参{}", JSON.toJSONString(practiceSetVO));
             }

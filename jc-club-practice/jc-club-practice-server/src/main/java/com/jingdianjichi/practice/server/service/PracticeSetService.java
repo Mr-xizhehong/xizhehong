@@ -12,14 +12,14 @@ import java.util.List;
 public interface PracticeSetService {
 
     /**
-     * 获取专项练习内容
+     * 得到所有的专项练习name
      */
     List<SpecialPracticeVO> getSpecialPracticeContent();
 
     /**
-     * 开始练习
+     * 得到并生成练习题id
      */
-    PracticeSetVO addPractice(PracticeSubjectDTO dto);
+    PracticeSetVO getAndAddPractice(PracticeSubjectDTO dto);
 
     /**
      * 获取练习题

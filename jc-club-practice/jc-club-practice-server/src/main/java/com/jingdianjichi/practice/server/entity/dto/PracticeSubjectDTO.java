@@ -29,7 +29,7 @@ public class PracticeSubjectDTO implements Serializable {
     private List<Long> excludeSubjectIds;
 
     /**
-     * 题目类型
+     * 题目id
      */
     private Long subjectId;
 

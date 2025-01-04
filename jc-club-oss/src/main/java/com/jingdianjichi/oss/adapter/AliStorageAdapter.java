@@ -9,9 +9,6 @@ import java.util.List;
 
 /**
  * 阿里云oss适配器
- *
- * @author: ChickenWing
- * @date: 2023/10/14
  */
 public class AliStorageAdapter implements StorageAdapter {
 

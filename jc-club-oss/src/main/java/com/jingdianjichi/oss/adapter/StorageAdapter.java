@@ -8,9 +8,6 @@ import java.util.List;
 
 /**
  * 文件存储适配器
- * 
- * @author: ChickenWing
- * @date: 2023/10/14
  */
 public interface StorageAdapter {
 

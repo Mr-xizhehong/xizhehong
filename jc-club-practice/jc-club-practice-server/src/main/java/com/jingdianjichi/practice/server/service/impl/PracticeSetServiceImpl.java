@@ -63,6 +63,9 @@ public class PracticeSetServiceImpl implements PracticeSetService {
     @Resource
     private SubjectMultipleDao subjectMultipleDao;
 
+    /**
+     *  得到所有的专项练习name
+     */
     @Override
     public List<SpecialPracticeVO> getSpecialPracticeContent() {
         List<SpecialPracticeVO> specialPracticeVOList = new LinkedList<>();
@@ -125,14 +128,20 @@ public class PracticeSetServiceImpl implements PracticeSetService {
         return specialPracticeVOList;
     }
 
+    /**
+     *  得到并生成练习题id
+     */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public PracticeSetVO addPractice(PracticeSubjectDTO dto) {
+    public PracticeSetVO getAndAddPractice(PracticeSubjectDTO dto) {
+        //实时生成练习题
         PracticeSetVO setVO = new PracticeSetVO();
-        List<PracticeSubjectDetailVO> practiceList = getPracticeList(dto);
+        List<PracticeSubjectDetailVO> practiceList = this.getPracticeList(dto);
         if (CollectionUtils.isEmpty(practiceList)) {
             return setVO;
         }
+        
+        //给练习题命名
         PracticeSetPO practiceSetPO = new PracticeSetPO();
         practiceSetPO.setSetType(1);
         List<String> assembleIds = dto.getAssembleIds();
@@ -158,6 +167,8 @@ public class PracticeSetServiceImpl implements PracticeSetService {
         } else {
             setName.append("等专项练习");
         }
+        
+        //将生成的练习题id存入数据库
         practiceSetPO.setSetName(setName.toString());
         String labelId = assembleIds.get(0).split("-")[1];
         SubjectLabelPO labelPO = subjectLabelDao.queryById(Long.valueOf(labelId));
@@ -167,8 +178,8 @@ public class PracticeSetServiceImpl implements PracticeSetService {
         practiceSetPO.setCreatedTime(new Date());
         practiceSetDao.add(practiceSetPO);
         Long practiceSetId = practiceSetPO.getId();
-
-        //思考，这里哪里不符合规范，配合听视频的延伸
+        
+        //将生成的练习题放入数据库
         practiceList.forEach(e -> {
             PracticeSetDetailPO detailPO = new PracticeSetDetailPO();
             detailPO.setSetId(practiceSetId);
@@ -179,12 +190,13 @@ public class PracticeSetServiceImpl implements PracticeSetService {
             detailPO.setCreatedTime(new Date());
             practiceSetDetailDao.add(detailPO);
         });
+        
         setVO.setSetId(practiceSetId);
         return setVO;
     }
 
     /**
-     * 获取套卷题目信息
+     * 获取套卷题目内容
      */
     private List<PracticeSubjectDetailVO> getPracticeList(PracticeSubjectDTO dto) {
         List<PracticeSubjectDetailVO> practiceSubjectListVOS = new LinkedList<>();
@@ -196,19 +208,23 @@ public class PracticeSetServiceImpl implements PracticeSetService {
         Integer multipleSubjectCount = 6;
         Integer judgeSubjectCount = 4;
         Integer totalSubjectCount = 20;
+        
         //查询单选
         dto.setSubjectCount(radioSubjectCount);
         dto.setSubjectType(SubjectInfoTypeEnum.RADIO.getCode());
-        assembleList(dto, practiceSubjectListVOS, excludeSubjectIds);
+        this.assembleList(dto, practiceSubjectListVOS, excludeSubjectIds);
+        
         //查询多选
         dto.setSubjectCount(multipleSubjectCount);
         dto.setSubjectType(SubjectInfoTypeEnum.MULTIPLE.getCode());
-        assembleList(dto, practiceSubjectListVOS, excludeSubjectIds);
+        this.assembleList(dto, practiceSubjectListVOS, excludeSubjectIds);
+        
         //查询判断
         dto.setSubjectCount(judgeSubjectCount);
         dto.setSubjectType(SubjectInfoTypeEnum.JUDGE.getCode());
-        assembleList(dto, practiceSubjectListVOS, excludeSubjectIds);
-        //补充题目
+        this.assembleList(dto, practiceSubjectListVOS, excludeSubjectIds);
+        
+        //如果前面查询中，查询出来的题目总数量不满足要求，则剩下的题目数量补充单选题
         if (practiceSubjectListVOS.size() == totalSubjectCount) {
             return practiceSubjectListVOS;
         }
@@ -219,6 +235,7 @@ public class PracticeSetServiceImpl implements PracticeSetService {
         return practiceSubjectListVOS;
     }
 
+    //根据assembleId和subjectType获取题目
     private List<PracticeSubjectDetailVO> assembleList(PracticeSubjectDTO dto, List<PracticeSubjectDetailVO> list, List<Long> excludeSubjectIds) {
         dto.setExcludeSubjectIds(excludeSubjectIds);
         List<SubjectPO> subjectPOList = subjectDao.getPracticeSubject(dto);
