@@ -62,6 +62,9 @@ public class PracticeSetServiceImpl implements PracticeSetService {
 
     @Resource
     private SubjectMultipleDao subjectMultipleDao;
+    
+    @Resource
+    private SubjectJudgeDao subjectJudgeDao;
 
     /**
      *  得到所有的专项练习name
@@ -346,6 +349,8 @@ public class PracticeSetServiceImpl implements PracticeSetService {
         SubjectPO subjectPO = subjectDao.selectById(dto.getSubjectId());
         practiceSubjectVO.setSubjectName(subjectPO.getSubjectName());
         practiceSubjectVO.setSubjectType(subjectPO.getSubjectType());
+        
+        //通过subjectId和题目类型 获取题目选项
         if (dto.getSubjectType() == SubjectInfoTypeEnum.RADIO.getCode()) {
             List<PracticeSubjectOptionVO> optionList = new LinkedList<>();
             List<SubjectRadioPO> radioSubjectPOS = subjectRadioDao.selectBySubjectId(subjectPO.getId());
@@ -368,6 +373,13 @@ public class PracticeSetServiceImpl implements PracticeSetService {
             });
             practiceSubjectVO.setOptionList(optionList);
         }
+        if (dto.getSubjectType() == SubjectInfoTypeEnum.JUDGE.getCode()){
+            List<PracticeSubjectOptionVO> optionList = new LinkedList<>();
+            SubjectJudgePO subjectJudgePO = subjectJudgeDao.selectBySubjectId(subjectPO.getId());
+            PracticeSubjectOptionVO practiceSubjectOptionVO = new PracticeSubjectOptionVO();
+            practiceSubjectOptionVO.setIsCorrect(subjectJudgePO.getIsCorrect());
+        }
+        
         return practiceSubjectVO;
     }
 

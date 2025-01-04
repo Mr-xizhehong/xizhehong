@@ -78,7 +78,7 @@ public class PracticeSetController {
     }
 
     /**
-     * 获取练习题
+     * 获取练习题内容
      */
     @PostMapping(value = "/getSubjects")
     public Result<PracticeSubjectListVO> getSubjects(@RequestBody GetPracticeSubjectsReq req) {
@@ -103,7 +103,7 @@ public class PracticeSetController {
     }
 
     /**
-     * 获取题目详情
+     * 通过subjectId得到题目详情
      */
     @PostMapping(value = "/getPracticeSubject")
     public Result<PracticeSubjectVO> getPracticeSubject(@RequestBody GetPracticeSubjectReq req) {

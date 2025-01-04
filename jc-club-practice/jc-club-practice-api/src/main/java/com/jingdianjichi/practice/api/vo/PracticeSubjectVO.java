@@ -19,7 +19,7 @@ public class PracticeSubjectVO implements Serializable {
     private Integer subjectType;
 
     /**
-     * 答案列表
+     * 选项列表
      */
     private List<String> answerContentList;
 
