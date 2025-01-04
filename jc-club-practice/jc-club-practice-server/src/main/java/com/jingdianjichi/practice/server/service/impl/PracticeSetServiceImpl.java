@@ -252,6 +252,7 @@ public class PracticeSetServiceImpl implements PracticeSetService {
         return list;
     }
 
+    //通过二级分类id获取二级分类下的所有标签
     private List<SpecialPracticeLabelVO> getLabelVOList(Long categoryId, List<Integer> subjectTypeList) {
         List<LabelCountPO> countPOList = subjectMappingDao.getLabelSubjectCount(categoryId, subjectTypeList);
         if (CollectionUtils.isEmpty(countPOList)) {
@@ -271,6 +272,7 @@ public class PracticeSetServiceImpl implements PracticeSetService {
 
     @Override
     public PracticeSubjectListVO getSubjects(GetPracticeSubjectsReq req) {
+        //得到对应套题
         Long setId = req.getSetId();
         PracticeSubjectListVO vo = new PracticeSubjectListVO();
         List<PracticeSubjectDetailVO> practiceSubjectListVOS = new LinkedList<>();
@@ -278,12 +280,15 @@ public class PracticeSetServiceImpl implements PracticeSetService {
         if (CollectionUtils.isEmpty(practiceSetDetailPOS)) {
             return vo;
         }
+        
+        //组装List<PracticeSubjectDetailVO>
         String loginId = LoginUtil.getLoginId();
         Long practiceId = req.getPracticeId();
         practiceSetDetailPOS.forEach(e -> {
             PracticeSubjectDetailVO practiceSubjectListVO = new PracticeSubjectDetailVO();
             practiceSubjectListVO.setSubjectId(e.getSubjectId());
             practiceSubjectListVO.setSubjectType(e.getSubjectType());
+            //判断用户之前是否作答过此套卷
             if (Objects.nonNull(practiceId)) {
                 PracticeDetailPO practiceDetailPO = practiceDetailDao.selectDetail(practiceId, e.getSubjectId(), loginId);
                 if (Objects.nonNull(practiceDetailPO) && StringUtils.isNotBlank(practiceDetailPO.getAnswerContent())) {
@@ -295,8 +300,12 @@ public class PracticeSetServiceImpl implements PracticeSetService {
             practiceSubjectListVOS.add(practiceSubjectListVO);
         });
         vo.setSubjectList(practiceSubjectListVOS);
+        
+        //设置套卷标题
         PracticeSetPO practiceSetPO = practiceSetDao.selectById(setId);
         vo.setTitle(practiceSetPO.getSetName());
+        
+        //如果用户是第一次作答此卷
         if (Objects.isNull(practiceId)) {
             Long newPracticeId = insertUnCompletePractice(setId);
             vo.setPracticeId(newPracticeId);
@@ -309,6 +318,7 @@ public class PracticeSetServiceImpl implements PracticeSetService {
         return vo;
     }
 
+    //插入用户新练习记录
     private Long insertUnCompletePractice(Long practiceSetId) {
         PracticePO practicePO = new PracticePO();
         practicePO.setSetId(practiceSetId);

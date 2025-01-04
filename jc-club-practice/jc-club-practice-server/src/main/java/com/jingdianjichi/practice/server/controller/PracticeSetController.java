@@ -44,7 +44,7 @@ public class PracticeSetController {
             return Result.ok(result);
         } catch (Exception e) {
             log.error("getSpecialPracticeContent.error:{}", e.getMessage(), e);
-            return Result.fail("获取专项练习内容失败");
+            return Result.fail("获取专项练习列表失败");
         }
 
     }
@@ -65,15 +65,15 @@ public class PracticeSetController {
             dto.setAssembleIds(req.getAssembleIds());
             PracticeSetVO practiceSetVO = practiceSetService.getAndAddPractice(dto);
             if (log.isInfoEnabled()) {
-                log.info("获取练习题目列表出参{}", JSON.toJSONString(practiceSetVO));
+                log.info("获取练习题目id出参{}", JSON.toJSONString(practiceSetVO));
             }
             return Result.ok(practiceSetVO);
         } catch (IllegalArgumentException e) {
             log.error("参数异常！错误原因{}", e.getMessage(), e);
             return Result.fail(e.getMessage());
         } catch (Exception e) {
-            log.error("获取练习题目列表异常！错误原因{}", e.getMessage(), e);
-            return Result.fail("获取练习题目列表异常！");
+            log.error("获取练习题目id异常！错误原因{}", e.getMessage(), e);
+            return Result.fail("获取练习题目id异常！");
         }
     }
 
