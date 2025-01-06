@@ -396,6 +396,7 @@ public class PracticeSetServiceImpl implements PracticeSetService {
         if (count == 0) {
             return pageResult;
         }
+        //排序方式通过sql语句进行排序
         List<PracticeSetPO> setPOList = practiceSetDao.getSetList(dto, start, dto.getPageInfo().getPageSize());
         if (log.isInfoEnabled()) {
             log.info("获取的模拟考卷列表{}", JSON.toJSONString(setPOList));
