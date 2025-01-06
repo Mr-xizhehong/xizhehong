@@ -373,12 +373,14 @@ public class PracticeSetServiceImpl implements PracticeSetService {
             });
             practiceSubjectVO.setOptionList(optionList);
         }
-        if (dto.getSubjectType() == SubjectInfoTypeEnum.JUDGE.getCode()){
-            List<PracticeSubjectOptionVO> optionList = new LinkedList<>();
-            SubjectJudgePO subjectJudgePO = subjectJudgeDao.selectBySubjectId(subjectPO.getId());
-            PracticeSubjectOptionVO practiceSubjectOptionVO = new PracticeSubjectOptionVO();
-            practiceSubjectOptionVO.setIsCorrect(subjectJudgePO.getIsCorrect());
-        }
+        
+        //此时不需要知道判断题的答案，所以也可以不存入判断题
+//        if (dto.getSubjectType() == SubjectInfoTypeEnum.JUDGE.getCode()){
+//            List<PracticeSubjectOptionVO> optionList = new LinkedList<>();
+//            SubjectJudgePO subjectJudgePO = subjectJudgeDao.selectBySubjectId(subjectPO.getId());
+//            PracticeSubjectOptionVO practiceSubjectOptionVO = new PracticeSubjectOptionVO();
+//            practiceSubjectOptionVO.setIsCorrect(subjectJudgePO.getIsCorrect());
+//        }
         
         return practiceSubjectVO;
     }
