@@ -123,6 +123,8 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
     @Override
     @Transactional(rollbackFor = Exception.class)
     public Boolean submitSubject(SubmitSubjectDetailReq req) {
+        
+        //计算用时并存储
         String timeUse = req.getTimeUse();
         if (timeUse.equals("0")) {
             timeUse = "000000";
@@ -140,29 +142,33 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
         practiceDetailPO.setPracticeId(req.getPracticeId());
         practiceDetailPO.setSubjectId(req.getSubjectId());
         practiceDetailPO.setSubjectType(req.getSubjectType());
+        
+        //存储作答的答案
         String answerContent = "";
-        //排序答案
         if (CollectionUtils.isNotEmpty(req.getAnswerContents())) {
             List<Integer> answerContents = req.getAnswerContents();
             Collections.sort(answerContents);
             answerContent = StringUtils.join(answerContents, ",");
         }
         practiceDetailPO.setAnswerContent(answerContent);
+        
+        //获取正确答案，并判断答案是否正确
         SubjectDTO subjectDTO = new SubjectDTO();
         subjectDTO.setSubjectId(req.getSubjectId());
         subjectDTO.setSubjectType(req.getSubjectType());
-        //获取正确答案，并判断答案是否正确
-        SubjectDetailDTO subjectDetail = getSubjectDetail(subjectDTO);
+        SubjectDetailDTO subjectDetail = this.getSubjectDetail(subjectDTO);
         StringBuffer correctAnswer = new StringBuffer();
         if (req.getSubjectType().equals(SubjectInfoTypeEnum.JUDGE.getCode())) {
             Integer isCorrect = subjectDetail.getIsCorrect();
             correctAnswer.append(isCorrect);
         } else {
+            //单选题和多选题组装答案
             subjectDetail.getOptionList().forEach(e -> {
                 if (Objects.equals(e.getIsCorrect(), 1)) {
                     correctAnswer.append(e.getOptionType()).append(",");
                 }
             });
+            //去除最后一个逗号
             if (correctAnswer.length() > 0) {
                 correctAnswer.deleteCharAt(correctAnswer.length() - 1);
             }
@@ -172,9 +178,12 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
         } else {
             practiceDetailPO.setAnswerStatus(0);
         }
+        
         practiceDetailPO.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         practiceDetailPO.setCreatedBy(LoginUtil.getLoginId());
         practiceDetailPO.setCreatedTime(new Date());
+        
+        //判断是否已经存在提交记录，存在则更新，不存在则插入
         PracticeDetailPO existDetail = practiceDetailDao.selectDetail(req.getPracticeId(), req.getSubjectId(), LoginUtil.getLoginId());
         if (Objects.isNull(existDetail)) {
             practiceDetailDao.insertSingle(practiceDetailPO);
