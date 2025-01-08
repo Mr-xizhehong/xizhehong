@@ -82,7 +82,7 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
         Integer correctCount = practiceDetailDao.selectCorrectCount(practiceId);
         List<PracticeSetDetailPO> practiceSetDetailPOS = practiceSetDetailDao.selectBySetId(setId);
         Integer totalCount = practiceSetDetailPOS.size();
-        BigDecimal correctRate = new BigDecimal(correctCount).divide(new BigDecimal(totalCount), 4, BigDecimal.ROUND_HALF_UP)
+        BigDecimal correctRate = new BigDecimal(correctCount.toString()).divide(new BigDecimal(totalCount.toString()), 4, BigDecimal.ROUND_HALF_UP)
                 .multiply(new BigDecimal("100.00"));
         practicePO.setCorrectRate(correctRate);
         
@@ -114,7 +114,7 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
                 practiceDetailPO.setPracticeId(practiceId);
                 practiceDetailPO.setSubjectType(e.getSubjectType());
                 practiceDetailPO.setSubjectId(e.getSubjectId());
-                practiceDetailPO.setAnswerStatus(0);
+                practiceDetailPO.setAnswerStatus(AnswerStatusEnum.ERROR.getCode());
                 practiceDetailPO.setAnswerContent("");
                 practiceDetailPO.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
                 practiceDetailPO.setCreatedTime(new Date());
@@ -179,9 +179,9 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
             }
         }
         if (Objects.equals(correctAnswer.toString(), answerContent)) {
-            practiceDetailPO.setAnswerStatus(1);
+            practiceDetailPO.setAnswerStatus(AnswerStatusEnum.CORRECT.getCode());
         } else {
-            practiceDetailPO.setAnswerStatus(0);
+            practiceDetailPO.setAnswerStatus(AnswerStatusEnum.ERROR.getCode());
         }
         
         practiceDetailPO.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
@@ -321,12 +321,15 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
 
     @Override
     public ReportVO getReport(GetReportReq req) {
+        //获取set套题名称
         ReportVO reportVO = new ReportVO();
         Long practiceId = req.getPracticeId();
         PracticePO practicePO = practiceDao.selectById(practiceId);
         Long setId = practicePO.getSetId();
         PracticeSetPO practiceSetPO = practiceSetDao.selectById(setId);
         reportVO.setTitle(practiceSetPO.getSetName());
+        
+        //获取正确数/总题数
         List<PracticeDetailPO> practiceDetailPOList = practiceDetailDao.selectByPracticeId(practiceId);
         if (CollectionUtils.isEmpty(practiceDetailPOList)) {
             return null;
@@ -335,6 +338,8 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
         List<PracticeDetailPO> correctPoList = practiceDetailPOList.stream().filter(e ->
                 Objects.equals(e.getAnswerStatus(), AnswerStatusEnum.CORRECT.getCode())).collect(Collectors.toList());
         reportVO.setCorrectSubject(correctPoList.size() + "/" + totalCount);
+        
+        //获得技能图谱
         List<ReportSkillVO> reportSkillVOS = new LinkedList<>();
         Map<Long, Integer> totalMap = getSubjectLabelMap(practiceDetailPOList);
         Map<Long, Integer> correctMap = getSubjectLabelMap(correctPoList);
@@ -362,7 +367,9 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
         return reportVO;
     }
 
-
+    /**
+     * 获取题目对应的标签map
+     */
     private Map<Long, Integer> getSubjectLabelMap(List<PracticeDetailPO> practiceDetailPOList) {
         if (CollectionUtils.isEmpty(practiceDetailPOList)) {
             return Collections.emptyMap();
