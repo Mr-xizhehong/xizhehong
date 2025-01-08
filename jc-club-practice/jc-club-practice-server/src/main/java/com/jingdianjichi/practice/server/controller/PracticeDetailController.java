@@ -26,7 +26,7 @@ public class PracticeDetailController {
     private PracticeDetailService practiceDetailService;
 
     /**
-     * 提交题目
+     * 提交一道题目
      */
     @PostMapping(value = "/submitSubject")
     public Result<Boolean> submitSubject(@RequestBody SubmitSubjectDetailReq req) {

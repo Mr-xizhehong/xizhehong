@@ -77,6 +77,7 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
         practicePO.setIsDeleted(IsDeletedFlagEnum.UN_DELETED.getCode());
         practicePO.setCreatedBy(LoginUtil.getLoginId());
         practicePO.setCreatedTime(new Date());
+        
         //计算正确率
         Integer correctCount = practiceDetailDao.selectCorrectCount(practiceId);
         List<PracticeSetDetailPO> practiceSetDetailPOS = practiceSetDetailDao.selectBySetId(setId);
@@ -84,6 +85,8 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
         BigDecimal correctRate = new BigDecimal(correctCount).divide(new BigDecimal(totalCount), 4, BigDecimal.ROUND_HALF_UP)
                 .multiply(new BigDecimal("100.00"));
         practicePO.setCorrectRate(correctRate);
+        
+        //查看是否为第一次提交，是则插入新记录，不是则更新记录
         PracticePO po = practiceDao.selectById(practiceId);
         if (Objects.isNull(po)) {
             practiceDao.insert(practicePO);
@@ -91,8 +94,10 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
             practicePO.setId(practiceId);
             practiceDao.update(practicePO);
         }
+        //练习对应的set套题热度+1
         practiceSetDao.updateHeat(setId);
-        //补充剩余题目的记录
+        
+        //通过stream流的filter得到仍然未作答的题目集合
         List<PracticeDetailPO> practiceDetailPOList = practiceDetailDao.selectByPracticeId(practiceId);
         List<PracticeSetDetailPO> minusList = practiceSetDetailPOS.stream()
                 .filter(item -> !practiceDetailPOList.stream()
@@ -101,7 +106,7 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
                         .contains(item.getSubjectId()))
                 .collect(Collectors.toList());
         if (log.isInfoEnabled()) {
-            log.info("题目差集{}", JSON.toJSONString(minusList));
+            log.info("仍然未做的题目集合{}", JSON.toJSONString(minusList));
         }
         if (CollectionUtils.isNotEmpty(minusList)) {
             minusList.forEach(e -> {
