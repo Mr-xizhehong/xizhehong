@@ -266,6 +266,8 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
         List<SubjectOptionDTO> optionList = subjectDetail.getOptionList();
         List<PracticeSubjectOptionVO> optionVOList = new LinkedList<>();
         List<Integer> correctAnswer = new LinkedList<>();
+        
+        //拼接正确答案，判断题题没有optionList,所有可以通过判断optionList是否为空来判断题目类型
         if (CollectionUtils.isNotEmpty(optionList)) {
             optionList.forEach(option -> {
                 PracticeSubjectOptionVO optionVO = new PracticeSubjectOptionVO();
@@ -296,6 +298,7 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
         subjectDetailVO.setSubjectParse(subjectDetail.getSubjectParse());
         subjectDetailVO.setSubjectName(subjectDetail.getSubjectName());
         subjectDetailVO.setCorrectAnswer(correctAnswer);
+        
         //自己的答题答案
         List<Integer> respondAnswer = new LinkedList<>();
         PracticeDetailPO practiceDetailPO = practiceDetailDao.selectAnswer(req.getPracticeId(), subjectId);
@@ -307,11 +310,10 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
             }
         }
         subjectDetailVO.setRespondAnswer(respondAnswer);
+        
+        //得到题目label
         List<SubjectMappingPO> subjectMappingPOList = subjectMappingDao.getLabelIdsBySubjectId(subjectId);
-        List<Long> labelIdList = new LinkedList<>();
-        subjectMappingPOList.forEach(subjectMappingPO -> {
-            labelIdList.add(subjectMappingPO.getLabelId());
-        });
+        List<Long> labelIdList = subjectMappingPOList.stream().map(SubjectMappingPO::getLabelId).collect(Collectors.toList());
         List<String> labelNameList = subjectLabelDao.getLabelNameByIds(labelIdList);
         subjectDetailVO.setLabelNames(labelNameList);
         return subjectDetailVO;

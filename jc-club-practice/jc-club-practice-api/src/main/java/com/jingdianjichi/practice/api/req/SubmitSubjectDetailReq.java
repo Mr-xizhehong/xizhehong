@@ -19,7 +19,7 @@ public class SubmitSubjectDetailReq implements Serializable {
     private Long subjectId;
 
     /**
-     * 题目答案
+     * 答题者题目答案
      */
     private List<Integer> answerContents;
 
