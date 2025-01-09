@@ -35,7 +35,7 @@ public class SubjectLikedController {
      * 新增题目点赞表，给题目点赞
      */
     @RequestMapping("add")
-    public Result<Boolean> add(@RequestBody SubjectLikedDTO subjectLikedDTO) {
+    public Result<String> add(@RequestBody SubjectLikedDTO subjectLikedDTO) {
 
         try {
             if (log.isInfoEnabled()) {
@@ -48,7 +48,7 @@ public class SubjectLikedController {
             Preconditions.checkNotNull(subjectLikedDTO.getLikeUserId(), "点赞人不能为空");
             SubjectLikedBO subjectLikedBO = SubjectLikedDTOConverter.INSTANCE.convertDTOToBO(subjectLikedDTO);
             subjectLikedDomainService.add(subjectLikedBO);
-            return Result.ok(true);
+            return Result.ok("点赞成功");
         } catch (Exception e) {
             log.error("SubjectLikedController.register.error:{}", e.getMessage(), e);
             return Result.fail("新增题目点赞表失败");
