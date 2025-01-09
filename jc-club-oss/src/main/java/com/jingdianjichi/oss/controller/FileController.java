@@ -11,9 +11,6 @@ import java.util.List;
 
 /**
  * 文件操作controller
- *
- * @author: ChickenWing
- * @date: 2023/10/14
  */
 @RestController
 public class FileController {
@@ -37,6 +34,7 @@ public class FileController {
      */
     @RequestMapping("/upload")
     public Result upload(MultipartFile uploadFile, String bucket, String objectName) throws Exception {
+        //注意上传时，图片名不能带中文字符
         String url = fileService.uploadFile(uploadFile, bucket, objectName);
         return Result.ok(url);
     }
