@@ -149,14 +149,4 @@ public class SubjectController {
         }
     }
 
-    /**
-     * 测试mq发送
-     */
-    @PostMapping("/pushMessage")
-    public Result<Boolean> pushMessage(@Param("id") int id) {
-        rocketMQTemplate.convertAndSend("test-topic", "鸡翅早上好" + id);
-        return Result.ok(true);
-    }
-
-
 }

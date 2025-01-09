@@ -60,18 +60,21 @@ public class SubjectLikedDomainServiceImpl implements SubjectLikedDomainService 
      */
     @Override
     public void add(SubjectLikedBO subjectLikedBO) {
+        //组装点赞信息
         Long subjectId = subjectLikedBO.getSubjectId();
         String likeUserId = subjectLikedBO.getLikeUserId();
         Integer status = subjectLikedBO.getStatus();
 //        String hashKey = buildSubjectLikedKey(subjectId.toString(), likeUserId);
 //        redisUtil.putHash(SUBJECT_LIKED_KEY, hashKey, status);
-
         SubjectLikedMessage subjectLikedMessage = new SubjectLikedMessage();
         subjectLikedMessage.setSubjectId(subjectId);
         subjectLikedMessage.setLikeUserId(likeUserId);
         subjectLikedMessage.setStatus(status);
+        
+        //消息队列发送消息
         rocketMQTemplate.convertAndSend("subject-liked", JSON.toJSONString(subjectLikedMessage));
         
+        //点赞数据存入redis
         String detailKey = SUBJECT_LIKED_DETAIL_KEY + "." + subjectId + "." + likeUserId;
         String countKey = SUBJECT_LIKED_COUNT_KEY + "." + subjectId;
         if (SubjectLikedStatusEnum.LIKED.getCode() == status) {
@@ -173,6 +176,9 @@ public class SubjectLikedDomainServiceImpl implements SubjectLikedDomainService 
         return pageResult;
     }
 
+    /**
+     * 消息队列消费信息方法
+     */
     @Override
     public void syncLikedByMsg(SubjectLikedBO subjectLikedBO) {
         List<SubjectLiked> subjectLikedList = new LinkedList<>();
