@@ -34,7 +34,7 @@ public class SubjectLikedController {
     /**
      * 新增题目点赞表，给题目点赞
      */
-    @RequestMapping("add")
+    @PostMapping("add")
     public Result<String> add(@RequestBody SubjectLikedDTO subjectLikedDTO) {
 
         try {

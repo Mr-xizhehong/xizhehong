@@ -52,7 +52,7 @@ public class ShareCircleController {
      * 新增圈子
      */
     @PostMapping(value = "/save")
-    public Result<Boolean> save(@RequestBody SaveShareCircleReq req) {
+    public Result<String> save(@RequestBody SaveShareCircleReq req) {
         try {
             if (log.isInfoEnabled()) {
                 log.info("新增圈子入参{}", JSON.toJSONString(req));
@@ -68,7 +68,7 @@ public class ShareCircleController {
             if (log.isInfoEnabled()) {
                 log.info("新增圈子{}", JSON.toJSONString(result));
             }
-            return Result.ok(result);
+            return Result.ok("添加圈子成功");
         } catch (IllegalArgumentException e) {
             log.error("参数异常！错误原因{}", e.getMessage(), e);
             return Result.fail(e.getMessage());

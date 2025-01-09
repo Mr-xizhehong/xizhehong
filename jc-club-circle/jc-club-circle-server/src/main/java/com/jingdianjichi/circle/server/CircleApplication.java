@@ -8,9 +8,6 @@ import org.springframework.context.annotation.ComponentScan;
 
 /**
  * 圈子微服务启动类
- *
- * @author: ChickenWing
- * @date: 2024/3/2
  */
 @SpringBootApplication
 @ComponentScan("com.jingdianjichi")
