@@ -155,7 +155,7 @@ public class PracticeDetailController {
     }
 
     /**
-     * 获取练习榜
+     * 获取练题排行榜
      */
     @PostMapping(value = "/getPracticeRankList")
     public Result<List<RankVO>> getPracticeRankList() {

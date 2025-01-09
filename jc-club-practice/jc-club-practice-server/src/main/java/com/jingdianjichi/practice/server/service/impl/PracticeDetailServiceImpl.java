@@ -393,8 +393,12 @@ public class PracticeDetailServiceImpl implements PracticeDetailService {
         return map;
     }
 
+    /**
+     * 获取练习题目排行榜
+     */
     @Override
     public List<RankVO> getPracticeRankList() {
+        //考虑用户可能可能一套题会有多次提交，对于使用zset进行排行榜实现会有问题，所以不考虑
         List<RankVO> list = new LinkedList<>();
         List<PracticeRankPO> poList = practiceDetailDao.getPracticeCount();
         if (CollectionUtils.isEmpty(poList)) {
