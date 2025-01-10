@@ -74,6 +74,7 @@
         FROM
             practice_info
         where is_deleted = 0
+          and complete_status = 1
         GROUP BY
             created_by
         order by count desc
