@@ -44,6 +44,8 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
     private ShareMomentMapper shareMomentMapper;
     @Resource
     private UserRpc userRpc;
+    @Resource
+    private ShareCommentReplyMapper shareCommentReplyMapper;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
@@ -61,7 +63,7 @@ public class ShareCommentReplyServiceImpl extends ServiceImpl<ShareCommentReplyM
             comment.setToUser(moment.getCreatedBy());
             comment.setToUserAuthor(Objects.nonNull(moment.getCreatedBy()) && loginId.equals(moment.getCreatedBy()) ? 1 : 0);
         } else {
-            ShareCommentReply shareCommentReply = super.getById(req.getTargetId());
+            ShareCommentReply shareCommentReply = shareCommentReplyMapper.selectById(req.getTargetId());
             comment.setParentId(req.getTargetId());
             comment.setReplyId(req.getTargetId());
             comment.setReplyUser(shareCommentReply.getCreatedBy());

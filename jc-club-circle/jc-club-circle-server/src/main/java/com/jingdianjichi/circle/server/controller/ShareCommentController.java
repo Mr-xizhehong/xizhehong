@@ -1,5 +1,15 @@
 package com.jingdianjichi.circle.server.controller;
 
+import java.util.List;
+import java.util.Objects;
+
+import javax.annotation.Resource;
+
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
@@ -17,15 +27,8 @@ import com.jingdianjichi.circle.server.service.ShareCommentReplyService;
 import com.jingdianjichi.circle.server.service.ShareMessageService;
 import com.jingdianjichi.circle.server.service.ShareMomentService;
 import com.jingdianjichi.circle.server.util.LoginUtil;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
 
-import javax.annotation.Resource;
-import java.util.List;
-import java.util.Objects;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * 回复及评论Controller
@@ -50,6 +53,7 @@ public class ShareCommentController {
     @PostMapping(value = "/save")
     public Result<Boolean> save(@RequestBody SaveShareCommentReplyReq req) {
         try {
+            //首先发布评论或回复
             if (log.isInfoEnabled()) {
                 log.info("发布内容入参{}", JSON.toJSONString(req));
             }
@@ -61,6 +65,8 @@ public class ShareCommentController {
             Preconditions.checkArgument((Objects.nonNull(req.getContent()) || Objects.nonNull(req.getPicUrlList())), "内容不能为空！");
             wordFilter.check(req.getContent());
             Boolean result = shareCommentReplyService.saveComment(req);
+            
+            //通过websocket推送消息
             //如果是评论动态
             if (req.getReplyType() == 1) {
                 shareMessageService.comment(LoginUtil.getLoginId(), moment.getCreatedBy(), moment.getId());
