@@ -10,6 +10,7 @@ import com.jingdianjichi.practice.api.enums.SubjectInfoTypeEnum;
 import com.jingdianjichi.practice.api.req.GetPracticeSubjectsReq;
 import com.jingdianjichi.practice.api.req.GetUnCompletePracticeReq;
 import com.jingdianjichi.practice.api.vo.*;
+import com.jingdianjichi.practice.server.config.Configuration.SubjectCountConfig;
 import com.jingdianjichi.practice.server.dao.*;
 import com.jingdianjichi.practice.server.entity.dto.CategoryDTO;
 import com.jingdianjichi.practice.server.entity.dto.PracticeSetDTO;
@@ -65,6 +66,9 @@ public class PracticeSetServiceImpl implements PracticeSetService {
     
     @Resource
     private SubjectJudgeDao subjectJudgeDao;
+    
+    @Resource
+    private SubjectCountConfig subjectCountConfig;
 
     /**
      *  得到所有的专项练习name
@@ -136,7 +140,7 @@ public class PracticeSetServiceImpl implements PracticeSetService {
      */
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public PracticeSetVO getAndAddPractice(PracticeSubjectDTO dto) {
+    public PracticeSetVO addPractice(PracticeSubjectDTO dto) {
         //实时生成练习题
         PracticeSetVO setVO = new PracticeSetVO();
         List<PracticeSubjectDetailVO> practiceList = this.getPracticeList(dto);
@@ -206,11 +210,11 @@ public class PracticeSetServiceImpl implements PracticeSetService {
         //避免重复
         List<Long> excludeSubjectIds = new LinkedList<>();
 
-        //设置题目数量，之后优化到nacos动态配置
-        Integer radioSubjectCount = 10;
-        Integer multipleSubjectCount = 6;
-        Integer judgeSubjectCount = 4;
-        Integer totalSubjectCount = 20;
+        //nacos动态配置获取
+        Integer radioSubjectCount = subjectCountConfig.getRadio();
+        Integer multipleSubjectCount = subjectCountConfig.getMultiple();
+        Integer judgeSubjectCount = subjectCountConfig.getJudge();
+        Integer totalSubjectCount = subjectCountConfig.getTotal();
         
         //查询单选
         dto.setSubjectCount(radioSubjectCount);

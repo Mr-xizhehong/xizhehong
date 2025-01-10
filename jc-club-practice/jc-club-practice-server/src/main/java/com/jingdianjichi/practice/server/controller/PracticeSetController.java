@@ -63,7 +63,7 @@ public class PracticeSetController {
             Preconditions.checkArgument(!CollectionUtils.isEmpty(req.getAssembleIds()), "标签ids不能为空！");
             PracticeSubjectDTO dto = new PracticeSubjectDTO();
             dto.setAssembleIds(req.getAssembleIds());
-            PracticeSetVO practiceSetVO = practiceSetService.getAndAddPractice(dto);
+            PracticeSetVO practiceSetVO = practiceSetService.addPractice(dto);
             if (log.isInfoEnabled()) {
                 log.info("获取练习题目id出参{}", JSON.toJSONString(practiceSetVO));
             }

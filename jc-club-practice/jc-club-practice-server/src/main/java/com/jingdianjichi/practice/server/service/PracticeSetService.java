@@ -19,7 +19,7 @@ public interface PracticeSetService {
     /**
      * 得到并生成练习题id
      */
-    PracticeSetVO getAndAddPractice(PracticeSubjectDTO dto);
+    PracticeSetVO addPractice(PracticeSubjectDTO dto);
 
     /**
      * 获取练习题
