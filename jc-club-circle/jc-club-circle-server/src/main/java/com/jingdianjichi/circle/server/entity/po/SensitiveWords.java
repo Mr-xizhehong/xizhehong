@@ -8,14 +8,6 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
-/**
- * <p>
- * 敏感词表
- * </p>
- *
- * @author ChickenWing
- * @since 2024/05/17
- */
 @Getter
 @Setter
 @TableName("sensitive_words")
