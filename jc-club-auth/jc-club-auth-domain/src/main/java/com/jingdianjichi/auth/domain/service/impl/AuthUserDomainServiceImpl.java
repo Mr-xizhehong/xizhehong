@@ -57,11 +57,11 @@ public class AuthUserDomainServiceImpl implements AuthUserDomainService {
     @Resource
     private RedisUtil redisUtil;
 
-    private String authPermissionPrefix = "auth.permission";
+    private String authPermissionPrefix = "xzh.auth.permission";
 
-    private String authRolePrefix = "auth.role";
+    private String authRolePrefix = "xzh.auth.role";
 
-    private static final String LOGIN_PREFIX = "loginCode";
+    private static final String LOGIN_PREFIX = "xzh.loginCode";
 
     @Override
     @SneakyThrows

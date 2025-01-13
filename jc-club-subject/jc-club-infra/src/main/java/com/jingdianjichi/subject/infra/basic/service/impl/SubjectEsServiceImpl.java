@@ -22,6 +22,7 @@ import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.elasticsearch.search.fetch.subphase.highlight.HighlightField;
 import org.elasticsearch.search.sort.SortOrder;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
@@ -32,6 +33,9 @@ import java.util.*;
 @Service
 @Slf4j
 public class SubjectEsServiceImpl implements SubjectEsService {
+    
+    @Value("${es.cluster.esConfigs[0].name}")
+    private String clusterName;
 
     @Override
     public boolean insert(SubjectInfoEs subjectInfoEs) {
@@ -163,7 +167,7 @@ public class SubjectEsServiceImpl implements SubjectEsService {
 
     private EsIndexInfo getEsIndexInfo() {
         EsIndexInfo esIndexInfo = new EsIndexInfo();
-        esIndexInfo.setClusterName("73438a827b55");
+        esIndexInfo.setClusterName(clusterName);
         esIndexInfo.setIndexName("subject_index");
         return esIndexInfo;
     }

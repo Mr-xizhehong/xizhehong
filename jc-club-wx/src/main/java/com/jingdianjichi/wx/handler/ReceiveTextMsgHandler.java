@@ -15,7 +15,7 @@ public class ReceiveTextMsgHandler implements WxChatMsgHandler {
 
     private static final String KEY_WORD = "验证码";
 
-    private static final String LOGIN_PREFIX = "loginCode";
+    private static final String LOGIN_PREFIX = "xzh.loginCode";
 
     @Resource
     private RedisUtil redisUtil;

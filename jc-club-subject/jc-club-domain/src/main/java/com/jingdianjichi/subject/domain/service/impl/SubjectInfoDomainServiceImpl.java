@@ -59,7 +59,7 @@ public class SubjectInfoDomainServiceImpl implements SubjectInfoDomainService {
     @Resource
     private RedisUtil redisUtil;
 
-    private static final String RANK_KEY = "subject_rank";
+    private static final String RANK_KEY = "xzh.subject_rank";
 
     /**
      * 工厂加策略模式新增题目

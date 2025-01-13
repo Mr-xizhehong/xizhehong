@@ -49,11 +49,11 @@ public class SubjectLikedDomainServiceImpl implements SubjectLikedDomainService 
     @Resource
     private RocketMQTemplate rocketMQTemplate;
 
-    private static final String SUBJECT_LIKED_KEY = "subject.liked";
+    private static final String SUBJECT_LIKED_KEY = "xzh.subject.liked";
 
-    private static final String SUBJECT_LIKED_COUNT_KEY = "subject.liked.count";
+    private static final String SUBJECT_LIKED_COUNT_KEY = "xzh.subject.liked.count";
 
-    private static final String SUBJECT_LIKED_DETAIL_KEY = "subject.liked.detail";
+    private static final String SUBJECT_LIKED_DETAIL_KEY = "xzh.subject.liked.detail";
 
     /**
      * 给题目点赞

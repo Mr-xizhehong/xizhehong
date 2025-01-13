@@ -215,7 +215,7 @@ public class PracticeSetServiceImpl implements PracticeSetService {
         Integer multipleSubjectCount = subjectCountConfig.getMultiple();
         Integer judgeSubjectCount = subjectCountConfig.getJudge();
         Integer totalSubjectCount = subjectCountConfig.getTotal();
-        
+
         //查询单选
         dto.setSubjectCount(radioSubjectCount);
         dto.setSubjectType(SubjectInfoTypeEnum.RADIO.getCode());

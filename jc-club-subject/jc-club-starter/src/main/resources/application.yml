@@ -72,3 +72,4 @@ rocketmq:
   name-server: 192.168.94.128:9876
   producer:
     group: test-group
+
