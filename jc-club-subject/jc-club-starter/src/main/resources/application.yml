@@ -5,7 +5,7 @@ spring:
     username: root
     password: DmNjjhpf49+4T1lPl0MWvtGJpTg8Lnw5qETak8r+vGZP/i5L3lClWpL1htSTh1eMVAxjgO8JHl4ChwJKJTSmdw==
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://192.168.94.128:3306/jcClub?useUnicode=true&characterEncoding=utf8&useSSL=false
+    url: jdbc:mysql://113.45.226.240:3306/jcClub?useUnicode=true&characterEncoding=utf8&useSSL=false
     type: com.alibaba.druid.pool.DruidDataSource
     druid:
       initial-size: 20
@@ -31,7 +31,7 @@ spring:
     # Redis数据库索引（默认为0）
     database: 0
     # Redis服务器地址
-    host: 192.168.94.128
+    host: 113.45.226.240
     # Redis服务器连接端口
     port: 6379
     # Redis服务器连接密码（默认为空）
@@ -55,7 +55,7 @@ es:
   cluster:
     esConfigs[0]:
       name: 73438a827b55
-      nodes: 192.168.94.128:9200
+      nodes: 113.45.226.240:9200
 #xxl:
 #  job:
 #    admin:
@@ -69,7 +69,7 @@ es:
 #      logpath: /data/applogs/xxl-job/jobhandler
 #      logretentiondays: 30
 rocketmq:
-  name-server: 192.168.94.128:9876
+  name-server: 113.45.226.240:9876
   producer:
     group: test-group
 
